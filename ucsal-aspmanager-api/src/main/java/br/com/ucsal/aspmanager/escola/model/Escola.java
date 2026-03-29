@@ -21,6 +21,7 @@ public class Escola {
     private Long id;
     private String nome;
     @Column(name = "status_registro")
+    @Enumerated(EnumType.STRING)
     private StatusRegistro statusRegistro;
     @ManyToOne
     @JoinColumn(name = "id_instituicao")

@@ -28,6 +28,7 @@ public class Software {
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
     @Column(name = "status_registro")
+    @Enumerated(EnumType.STRING)
     private StatusRegistro statusRegistro;
 
 }
