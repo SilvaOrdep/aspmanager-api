@@ -1,5 +1,6 @@
 package br.com.ucsal.aspmanager.software.model;
 
+import br.com.ucsal.aspmanager.professor.Professor;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoSolicitacaoSoftware;
 import jakarta.persistence.*;
@@ -24,5 +25,11 @@ public class SolicitacaoSoftware {
     private TipoSolicitacaoSoftware tipoSolicitacaoSoftware;
     @Column(name = "status_solicitado")
     private StatusSolicitacao statusSolicitacao;
+    @ManyToOne
+    @JoinColumn(name = "id_software")
+    private Software software;
+    @ManyToOne
+    @JoinColumn(name = "id_professor")
+    private Professor professor;
 
 }

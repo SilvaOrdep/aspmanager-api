@@ -13,7 +13,6 @@ import lombok.*;
 @Entity
 @Table(name = "telefones_instituicoes")
 public class TelefoneInstituicao extends Telefone {
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_instituicao")
     private InstituicaoEnsino instituicao;

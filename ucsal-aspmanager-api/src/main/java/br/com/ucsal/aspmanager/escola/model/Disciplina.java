@@ -17,5 +17,8 @@ public class Disciplina {
     private Long id;
     private String nome;
     private String descricao;
+    @ManyToOne
+    @JoinColumn(name = "id_escola")
+    private Escola escola;
 
 }

@@ -1,11 +1,15 @@
 package br.com.ucsal.aspmanager.espaco.model;
 
+import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoEspaco;
+import br.com.ucsal.aspmanager.software.model.Software;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -29,4 +33,15 @@ public class Espaco {
     private String tipoComputadores;
     @Enumerated(EnumType.STRING)
     private TipoEspaco tipoEspaco;
+    @ManyToOne
+    @JoinColumn(name = "id_escola")
+    private Escola escola;
+    @ManyToMany
+    @JoinTable(
+            name = "escola_softwares",
+            joinColumns = @JoinColumn(name = "id_escola"),
+            inverseJoinColumns = @JoinColumn(name = "id_software")
+    )
+    private List<Software> softwares;
+
 }

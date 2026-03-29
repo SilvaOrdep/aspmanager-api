@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "usuarios")
@@ -25,5 +27,7 @@ public class Usuario {
     @Column(name = "status_registro")
     @Enumerated(EnumType.STRING)
     private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private List<TelefoneUsuario> telefones;
 
 }

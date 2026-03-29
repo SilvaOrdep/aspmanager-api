@@ -13,7 +13,6 @@ import lombok.*;
 @Entity
 @Table(name = "telefones_usuarios")
 public class TelefoneUsuario extends Telefone {
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;

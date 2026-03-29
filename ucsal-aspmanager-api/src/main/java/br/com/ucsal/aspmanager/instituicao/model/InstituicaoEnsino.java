@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "instituicoes_ensino")
@@ -16,5 +18,7 @@ public class InstituicaoEnsino {
     private Long id;
     private String nome;
     private String endereco;
-    // telefone, listas de escolas relacao bidirecional
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "instituicao")
+    private List<TelefoneInstituicao> telefones;
+
 }
