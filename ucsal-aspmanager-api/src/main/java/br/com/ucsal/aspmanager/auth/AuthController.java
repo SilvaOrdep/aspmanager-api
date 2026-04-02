@@ -2,6 +2,7 @@ package br.com.ucsal.aspmanager.auth;
 
 import br.com.ucsal.aspmanager.auth.dto.LoginRequest;
 import br.com.ucsal.aspmanager.auth.dto.TokenResponse;
+import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.security.jwt.JwtService;
 import br.com.ucsal.aspmanager.usuario.dto.request.CriarUsuarioDto;
 import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
@@ -52,6 +53,7 @@ public class AuthController {
                 .email(request.email())
                 .senha(codificadorDeSenha.encode(request.senha()))
                 .perfil(request.perfil())
+                .statusRegistro(StatusRegistro.ATIVO)
                 .build();
 
         usuarios.save(usuario);

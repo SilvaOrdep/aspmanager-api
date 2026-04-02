@@ -32,7 +32,7 @@ public class Usuario implements UserDetails {
     private Perfil perfil;
     @Column(name = "status_registro")
     @Enumerated(EnumType.STRING)
-    private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
+    private StatusRegistro statusRegistro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
     private List<TelefoneUsuario> telefones;
 
