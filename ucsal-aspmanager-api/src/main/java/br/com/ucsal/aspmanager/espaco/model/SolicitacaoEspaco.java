@@ -1,6 +1,6 @@
 package br.com.ucsal.aspmanager.espaco.model;
 
-import br.com.ucsal.aspmanager.professor.Professor;
+import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class SolicitacaoEspaco {
     @Column(name = "hora_fim")
     private LocalTime horaFim;
     @Column(name = "status_solicitacao")
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private StatusSolicitacao statusSolicitacao;
     @ManyToOne
     @JoinColumn(name = "id_espaco")

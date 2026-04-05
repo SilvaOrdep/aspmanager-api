@@ -15,10 +15,11 @@ public class Disciplina {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String nome;
     private String descricao;
     @ManyToOne
-    @JoinColumn(name = "id_escola")
+    @JoinColumn(name = "id_escola", nullable = false)
     private Escola escola;
 
 }

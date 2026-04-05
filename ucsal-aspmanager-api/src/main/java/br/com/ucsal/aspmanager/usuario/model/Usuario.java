@@ -24,13 +24,16 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "nome_completo")
+    @Column(name = "nome_completo", nullable = false)
     private String nomeCompleto;
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
     private String senha;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Perfil perfil;
-    @Column(name = "status_registro")
+    @Column(name = "status_registro", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusRegistro statusRegistro;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
@@ -68,6 +71,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return statusRegistro == StatusRegistro.ATIVO;
     }
 }

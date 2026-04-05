@@ -17,13 +17,14 @@ public class Software {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String nome;
     private String versao;
     @Column(name = "url_download")
     private String urlDownload;
     @Column(name = "tipo_licenca")
     private String tipoLicenca;
-    @Column(name = "objetivo_uso")
+    @Column(name = "objetivo_uso", nullable = false)
     private String objetivoUso;
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;

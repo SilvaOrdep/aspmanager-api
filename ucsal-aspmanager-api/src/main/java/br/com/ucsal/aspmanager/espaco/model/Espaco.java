@@ -38,8 +38,8 @@ public class Espaco {
     private Escola escola;
     @ManyToMany
     @JoinTable(
-            name = "escola_softwares",
-            joinColumns = @JoinColumn(name = "id_escola"),
+            name = "espaco_softwares",
+            joinColumns = @JoinColumn(name = "id_espaco"),
             inverseJoinColumns = @JoinColumn(name = "id_software")
     )
     private List<Software> softwares;

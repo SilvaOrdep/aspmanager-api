@@ -16,6 +16,7 @@ public class InstituicaoEnsino {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String nome;
     private String endereco;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "instituicao")
