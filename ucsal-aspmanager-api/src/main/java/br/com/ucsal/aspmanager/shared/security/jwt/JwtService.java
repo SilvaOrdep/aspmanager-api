@@ -35,7 +35,7 @@ public class JwtService {
 
         DecodedJWT decodedJWT = JWT.require(algorithm)
                 .build().verify(token);
-
+        //tratamento de exceção
         return Optional.of(new UsuarioResponse(decodedJWT.getClaim("idUsuario").asLong(), null, decodedJWT.getSubject(),
                 Perfil.valueOf(decodedJWT.getClaim("perfil").asString()), null, null));
     }
