@@ -41,4 +41,6 @@ public class UsuarioController {
     public ResponseEntity<Page<UsuarioResponse>> buscarTodos(Pageable filtros) {
         return ResponseEntity.ok(usuarioService.buscarTodos(filtros));
     }
+
+
 }

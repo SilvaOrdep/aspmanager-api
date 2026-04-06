@@ -13,6 +13,10 @@ public record CreateUsuarioRequest(
 
     @NotBlank(message = "Senha é obrigatória") @Size(min = 6, max = 30, message = "Senha deve ter entre 6 e 30 caracteres") String senha,
 
-    @NotNull(message = "Perfil é obrigatório") Perfil perfil) {
+    @NotNull(message = "Perfil é obrigatório") Perfil perfil,
+
+    Long idEscola,
+
+    String matricula) {
 }
 // Ajustar depois a questão dos telefones

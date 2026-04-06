@@ -3,6 +3,7 @@ package br.com.ucsal.aspmanager.usuario.model;
 import br.com.ucsal.aspmanager.escola.model.Escola;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "professores")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Professor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,7 @@ public class Professor {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
     @ManyToOne
-    @JoinColumn(name = "id_escola")
+    @JoinColumn(name = "id_escola", nullable = false)
     private Escola escola;
 
 }

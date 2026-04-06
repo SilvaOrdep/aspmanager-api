@@ -11,5 +11,6 @@ public record UsuarioResponse(
     String email,
     Perfil perfil,
     StatusRegistro statusRegistro,
+    String matricula,
     List<String> telefones) {
 }

@@ -14,5 +14,9 @@ public record UpdateUsuarioRequest(
 
     Perfil perfil,
 
+    String matricula,
+
+    Long idEscola,
+
     StatusRegistro statusRegistro) {
 }
