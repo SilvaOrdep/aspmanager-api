@@ -36,7 +36,7 @@ public class Usuario implements UserDetails {
     @Column(name = "status_registro", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusRegistro statusRegistro;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<TelefoneUsuario> telefones;
 
     @Override

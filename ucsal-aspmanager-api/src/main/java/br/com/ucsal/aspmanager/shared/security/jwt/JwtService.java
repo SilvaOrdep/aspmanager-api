@@ -37,7 +37,7 @@ public class JwtService {
                 .build().verify(token);
         //tratamento de exceção
         return Optional.of(new UsuarioResponse(decodedJWT.getClaim("idUsuario").asLong(), null, decodedJWT.getSubject(),
-                Perfil.valueOf(decodedJWT.getClaim("perfil").asString()), null, null));
+                Perfil.valueOf(decodedJWT.getClaim("perfil").asString()), null, null, null));
     }
 
 }

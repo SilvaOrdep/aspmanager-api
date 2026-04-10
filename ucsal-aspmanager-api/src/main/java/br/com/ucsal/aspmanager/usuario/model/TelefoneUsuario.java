@@ -12,6 +12,7 @@ import lombok.*;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "telefones_usuarios")
+@Builder
 public class TelefoneUsuario extends Telefone {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
