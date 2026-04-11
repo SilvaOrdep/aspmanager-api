@@ -21,6 +21,6 @@ jobs:
       - name: Build e Push da imagem
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./ucsal-aspmanager-api
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/asp_manager_api:latest
