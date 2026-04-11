@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/auth/test").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
