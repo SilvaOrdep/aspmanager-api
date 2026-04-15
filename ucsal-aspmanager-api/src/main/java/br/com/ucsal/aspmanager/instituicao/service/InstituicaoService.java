@@ -1,4 +1,4 @@
-package br.com.ucsal.aspmanager.instituicao;
+package br.com.ucsal.aspmanager.instituicao.service;
 
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import org.springframework.data.domain.Page;

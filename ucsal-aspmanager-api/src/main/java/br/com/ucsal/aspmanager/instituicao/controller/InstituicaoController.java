@@ -1,7 +1,7 @@
-package br.com.ucsal.aspmanager.instituicao;
+package br.com.ucsal.aspmanager.instituicao.controller;
 
+import br.com.ucsal.aspmanager.instituicao.service.InstituicaoService;
 import br.com.ucsal.aspmanager.shared.controller.AbstractCrudController;
-import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
