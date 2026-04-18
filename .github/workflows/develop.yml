@@ -2,7 +2,7 @@ name: Build and Push to Docker Hub
 
 on:
   push:
-    branches: [ "main", "develop" ] # O processo dispara sempre que houver push na main
+    branches: [ "main" ] # O processo dispara sempre que houver push na main
 
 jobs:
   build-and-push:
