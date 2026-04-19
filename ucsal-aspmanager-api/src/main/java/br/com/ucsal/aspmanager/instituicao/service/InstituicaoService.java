@@ -9,8 +9,7 @@ import br.com.ucsal.aspmanager.instituicao.repository.InstituicaoEnsinoRepositor
 import br.com.ucsal.aspmanager.instituicao.repository.TelefoneInstituicaoRepository;
 import br.com.ucsal.aspmanager.shared.model.Telefone;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
-import br.com.ucsal.aspmanager.usuario.model.TelefoneUsuario;
-import br.com.ucsal.aspmanager.usuario.model.Usuario;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,21 +50,29 @@ public class InstituicaoService implements ServiceBase<Long,
 
     @Override
     public Page<InstituicaoEnsinoResponse> buscarTodos(Pageable filtros) {
+
+        return instituicoes.findAll(filtros).map(instituicao ->
+                new InstituicaoEnsinoResponse(instituicao.getId(), instituicao.getNome(),
+                instituicao.getEndereco(), instituicao.getTelefones().stream().map(Telefone::getNumero).toList()));
+    }
+
+    @Override
+    public InstituicaoEnsinoResponse buscar(Long id) {
+
+        InstituicaoEnsino instituicao = instituicoes.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Instituição de Ensino não encontrada!"));
+
+        return new InstituicaoEnsinoResponse(instituicao.getId(), instituicao.getNome(),
+                instituicao.getEndereco(), instituicao.getTelefones().stream().map(Telefone::getNumero).toList());
+    }
+
+    @Override
+    public InstituicaoEnsinoResponse atualizar(Long id, UpdateInstituicaoEnsinoRequest updateInstituicaoEnsinoRequest) {
         return null;
     }
 
     @Override
-    public InstituicaoEnsinoResponse buscar(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public InstituicaoEnsinoResponse atualizar(Long aLong, UpdateInstituicaoEnsinoRequest updateInstituicaoEnsinoRequest) {
-        return null;
-    }
-
-    @Override
-    public void deletar(Long aLong) {
+    public void deletar(Long id) {
 
     }
 
