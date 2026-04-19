@@ -12,6 +12,8 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.env
+src/main/resources/env.properties
 
 ### IntelliJ IDEA ###
 .idea
@@ -31,4 +33,4 @@ build/
 
 ### VS Code ###
 .vscode/
-/.env
+/src/main/resources/env.properties
