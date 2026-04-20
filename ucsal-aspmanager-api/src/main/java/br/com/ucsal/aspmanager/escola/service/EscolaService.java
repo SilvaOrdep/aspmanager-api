@@ -185,7 +185,13 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     public void deletarDisciplina (Long id){
-
+        try{
+            disciplinas.deleteById(id);
+        }catch(DataIntegrityViolationException e){
+            throw new DataIntegrityViolationException("A Instituição de Ensino está associada a alguma Escola!");
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Disciplina não encontrada!");
+        }
 
     }
 }
