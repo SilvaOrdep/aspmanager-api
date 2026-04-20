@@ -18,6 +18,7 @@ import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.usuario.repository.ProfessorRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -124,7 +125,16 @@ public class EscolaService implements ServiceBase<Long,
     @Override
     public void deletar(Long id) {
 
-        escolas.deleteById(id);
+        try{
+            escolas.deleteById(id);
+
+        }catch(DataIntegrityViolationException e){
+
+            Escola escola = escolas.findById(id).orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+            escola.setStatusRegistro(StatusRegistro.INATIVO);
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Escola não encontrada!");
+        }
     }
 
     public DisciplinaResponse criarDisciplina(CreateDisciplinaRequest createDisciplinaRequest){
