@@ -155,11 +155,17 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     public Page<DisciplinaResponse> buscarDisciplina(Pageable filtros){
-        return null;
+        return disciplinas.findAll(filtros).map(disciplina -> new DisciplinaResponse(disciplina.getId(),
+                disciplina.getNome(), disciplina.getDescricao(), disciplina.getEscola().getId()));
     }
 
     public DisciplinaResponse buscarDisciplina(Long id){
-        return null;
+
+        Disciplina disciplina = disciplinas.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada!"));
+
+        return new DisciplinaResponse(disciplina.getId(), disciplina.getNome(),
+                disciplina.getDescricao(), disciplina.getEscola().getId());
     }
 
     public DisciplinaResponse atualizarDisciplina(Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
