@@ -169,10 +169,23 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     public DisciplinaResponse atualizarDisciplina(Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
-        return null;
+
+        Disciplina disciplina = disciplinas.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada!"));
+
+        Escola escola = escolas.findById(updateDisciplinaRequest.idEscola()).
+                orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+
+        disciplina.setNome(updateDisciplinaRequest.nome());
+        disciplina.setDescricao(updateDisciplinaRequest.descricao());
+        disciplina.setEscola(escola);
+
+        return new DisciplinaResponse(disciplina.getId(), disciplina.getNome(),
+                disciplina.getDescricao(), disciplina.getEscola().getId());
     }
 
     public void deletarDisciplina (Long id){
+
 
     }
 }
