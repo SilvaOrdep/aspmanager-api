@@ -139,7 +139,19 @@ public class EscolaService implements ServiceBase<Long,
 
     public DisciplinaResponse criarDisciplina(CreateDisciplinaRequest createDisciplinaRequest){
 
-        return null;
+        Escola escola = escolas.findById(createDisciplinaRequest.idEscola()).
+                orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+
+        Disciplina disciplina = Disciplina.builder().
+                nome(createDisciplinaRequest.nome()).
+                descricao(createDisciplinaRequest.descricao()).
+                escola(escola).
+                build();
+
+        disciplinas.save(disciplina);
+
+        return new DisciplinaResponse(disciplina.getId(), disciplina.getNome(),
+                disciplina.getDescricao(), disciplina.getEscola().getId());
     }
 
     public Page<DisciplinaResponse> buscarDisciplina(Pageable filtros){
