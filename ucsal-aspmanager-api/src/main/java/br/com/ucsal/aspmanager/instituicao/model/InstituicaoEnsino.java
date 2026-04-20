@@ -2,6 +2,7 @@ package br.com.ucsal.aspmanager.instituicao.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "instituicoes_ensino")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class InstituicaoEnsino {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
