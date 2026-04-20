@@ -10,6 +10,7 @@ import br.com.ucsal.aspmanager.instituicao.repository.TelefoneInstituicaoReposit
 import br.com.ucsal.aspmanager.shared.model.Telefone;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -92,8 +93,13 @@ public class InstituicaoService implements ServiceBase<Long,
     @Override
     public void deletar(Long id) {
 
-
-
+        try{
+            instituicoes.deleteById(id);
+        }catch (DataIntegrityViolationException e){
+            throw new DataIntegrityViolationException("A Instituição de Ensino está associada a alguma Escola!");
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Instituição de Ensino não encontrada!");
+        }
     }
 
     private void criarTelefoneParaIES(String telefone, InstituicaoEnsino instituicaoEnsino) {
