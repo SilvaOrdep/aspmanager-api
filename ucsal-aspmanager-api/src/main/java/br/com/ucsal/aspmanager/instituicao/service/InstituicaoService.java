@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class InstituicaoService implements ServiceBase<Long,
@@ -68,11 +69,30 @@ public class InstituicaoService implements ServiceBase<Long,
 
     @Override
     public InstituicaoEnsinoResponse atualizar(Long id, UpdateInstituicaoEnsinoRequest updateInstituicaoEnsinoRequest) {
-        return null;
+
+        InstituicaoEnsino instituicao = instituicoes.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Instituição de Ensino não encontrada!"));
+
+        instituicao.setNome(updateInstituicaoEnsinoRequest.nome());
+        instituicao.setEndereco(updateInstituicaoEnsinoRequest.endereco());
+
+        if(updateInstituicaoEnsinoRequest.telefones() != null
+                && !updateInstituicaoEnsinoRequest.telefones().isEmpty()){
+
+            List telefonesIES = instituicao.getTelefones();
+            telefonesIES.addAll(updateInstituicaoEnsinoRequest.telefones());
+
+            instituicao.setTelefones(telefonesIES);
+
+        }
+        return new InstituicaoEnsinoResponse(instituicao.getId(), instituicao.getNome(),
+                instituicao.getEndereco(), instituicao.getTelefones().stream().map(Telefone::getNumero).toList());
     }
 
     @Override
     public void deletar(Long id) {
+
+
 
     }
 
