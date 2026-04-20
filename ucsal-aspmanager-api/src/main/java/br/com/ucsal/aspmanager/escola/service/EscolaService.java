@@ -101,13 +101,30 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     @Override
-    public EscolaResponse atualizar(Long aLong, UpdateEscolaRequest updateEscolaRequest) {
-        return null;
+    public EscolaResponse atualizar(Long id, UpdateEscolaRequest updateEscolaRequest) {
+
+        Escola escola = escolas.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+
+        InstituicaoEnsino instituicao = instituicoes.findById(updateEscolaRequest.idInstituicao()).
+                orElseThrow(() -> new EntityNotFoundException(("Instituição de ensino não encontrada!")));
+
+        Professor professor = professores.findById(updateEscolaRequest.idCoordenador()).
+                orElseThrow(() -> new EntityNotFoundException(("Professor não encontrado!")));
+
+        escola.setNome(updateEscolaRequest.nome());
+        escola.setInstituicao(instituicao);
+        escola.setCoordenador(professor);
+
+        return new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
+                escola.getInstituicao().getId(), escola.getCoordenador().getId(),
+                escola.getDisciplinas().stream().map(Disciplina::getId).toList());
     }
 
     @Override
-    public void deletar(Long aLong) {
+    public void deletar(Long id) {
 
+        escolas.deleteById(id);
     }
 
     public DisciplinaResponse criarDisciplina(CreateDisciplinaRequest createDisciplinaRequest){
