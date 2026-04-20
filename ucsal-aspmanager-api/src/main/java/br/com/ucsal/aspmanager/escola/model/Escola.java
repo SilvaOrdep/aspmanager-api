@@ -5,6 +5,7 @@ import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Table(name = "escolas")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Escola {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
