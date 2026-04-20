@@ -3,6 +3,7 @@ package br.com.ucsal.aspmanager.escola.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "disciplinas")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Disciplina {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
