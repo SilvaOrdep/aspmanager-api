@@ -1,14 +1,14 @@
 package br.com.ucsal.aspmanager.escola.service;
 
+import br.com.ucsal.aspmanager.escola.dto.request.CreateDisciplinaRequest;
 import br.com.ucsal.aspmanager.escola.dto.request.CreateEscolaRequest;
+import br.com.ucsal.aspmanager.escola.dto.request.UpdateDisciplinaRequest;
 import br.com.ucsal.aspmanager.escola.dto.request.UpdateEscolaRequest;
+import br.com.ucsal.aspmanager.escola.dto.response.DisciplinaResponse;
 import br.com.ucsal.aspmanager.escola.dto.response.EscolaResponse;
-import br.com.ucsal.aspmanager.escola.model.Disciplina;
 import br.com.ucsal.aspmanager.escola.repository.DisciplinaRepository;
 import br.com.ucsal.aspmanager.escola.repository.EscolaRepository;
-import br.com.ucsal.aspmanager.instituicao.dto.request.CreateInstituicaoEnsinoRequest;
-import br.com.ucsal.aspmanager.instituicao.dto.request.UpdateInstituicaoEnsinoRequest;
-import br.com.ucsal.aspmanager.instituicao.dto.response.InstituicaoEnsinoResponse;
+
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +49,27 @@ public class EscolaService implements ServiceBase<Long,
 
     @Override
     public void deletar(Long aLong) {
+
+    }
+
+    public DisciplinaResponse criarDisciplina(CreateDisciplinaRequest createDisciplinaRequest){
+
+        return null;
+    }
+
+    public Page<DisciplinaResponse> buscarDisciplina(Pageable filtros){
+        return null;
+    }
+
+    public DisciplinaResponse buscarDisciplina(Long id){
+        return null;
+    }
+
+    public DisciplinaResponse atualizarDisciplina(Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
+        return null;
+    }
+
+    public void deletarDisciplina (Long id){
 
     }
 }
