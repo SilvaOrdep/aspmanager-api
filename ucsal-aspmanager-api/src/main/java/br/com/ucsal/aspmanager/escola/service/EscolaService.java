@@ -83,13 +83,21 @@ public class EscolaService implements ServiceBase<Long,
     @Override
     public Page<EscolaResponse> buscarTodos(Pageable filtros) {
 
-
-        return null;
+        return escolas.findAll(filtros).map(escola ->
+                new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
+                        escola.getInstituicao().getId(), escola.getCoordenador().getId(),
+                        escola.getDisciplinas().stream().map(Disciplina::getId).toList()));
     }
 
     @Override
-    public EscolaResponse buscar(Long aLong) {
-        return null;
+    public EscolaResponse buscar(Long id) {
+
+        Escola escola = escolas.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+
+        return new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
+                escola.getInstituicao().getId(), escola.getCoordenador().getId(),
+                escola.getDisciplinas().stream().map(Disciplina::getId).toList());
     }
 
     @Override
