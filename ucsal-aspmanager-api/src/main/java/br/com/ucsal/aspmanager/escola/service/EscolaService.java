@@ -73,6 +73,8 @@ public class EscolaService implements ServiceBase<Long,
                 disciplinas(disciplinas).
                 build();
 
+        escolas.save(escola);
+
         return new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
                 escola.getInstituicao().getId(), escola.getCoordenador().getId(),
                 escola.getDisciplinas().stream().map(Disciplina::getId).toList());
@@ -80,6 +82,8 @@ public class EscolaService implements ServiceBase<Long,
 
     @Override
     public Page<EscolaResponse> buscarTodos(Pageable filtros) {
+
+
         return null;
     }
 
