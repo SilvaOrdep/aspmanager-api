@@ -12,10 +12,14 @@ import br.com.ucsal.aspmanager.espaco.dto.response.SolicitacaoResponse;
 import br.com.ucsal.aspmanager.espaco.model.Espaco;
 import br.com.ucsal.aspmanager.espaco.model.SolicitacaoEspaco;
 import br.com.ucsal.aspmanager.espaco.repository.EspacoRepository;
+import br.com.ucsal.aspmanager.espaco.repository.SolicitacaoEspacoRepository;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
+import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import br.com.ucsal.aspmanager.software.model.Software;
 import br.com.ucsal.aspmanager.software.repository.SoftwareRepository;
+import br.com.ucsal.aspmanager.usuario.model.Professor;
+import br.com.ucsal.aspmanager.usuario.repository.ProfessorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -30,13 +34,17 @@ public class EspacoService implements ServiceBase<Long,
         CreateEspacoRequest, UpdateEspacoRequest, EspacoResponse> {
 
     private final EspacoRepository espacos;
+    private final SolicitacaoEspacoRepository solicitacoes;
     private final EscolaRepository escolas;
     private final SoftwareRepository softwares;
+    private final ProfessorRepository professores;
 
-    public EspacoService(EspacoRepository espacos, EscolaRepository escolas, SoftwareRepository softwares) {
+    public EspacoService(EspacoRepository espacos, SolicitacaoEspacoRepository solicitacoes, EscolaRepository escolas, SoftwareRepository softwares, ProfessorRepository professores) {
         this.espacos = espacos;
+        this.solicitacoes = solicitacoes;
         this.escolas = escolas;
         this.softwares = softwares;
+        this.professores = professores;
     }
 
     @Override
@@ -144,7 +152,28 @@ public class EspacoService implements ServiceBase<Long,
     }
 
     public SolicitacaoResponse criarSolicitacao(CreateSolicitacaoRequest request){
-        return null;
+
+        Professor professor = professores.findById(request.idProfessor()).orElseThrow(() ->
+                new EntityNotFoundException("Professor não encontrado!"));
+
+        Espaco espaco = espacos.findById(request.idEspaco()).orElseThrow(() ->
+                new EntityNotFoundException("Espaço não encontrado!"));
+
+        SolicitacaoEspaco solicitacaoEspaco = SolicitacaoEspaco.builder().
+                dataUso(request.dataUso()).
+                horaInicio(request.horaInicio()).
+                horaFim(request.horaFim()).
+                professor(professor).
+                espaco(espaco).
+                statusSolicitacao(StatusSolicitacao.PENDENTE).
+                build();
+
+        solicitacoes.save(solicitacaoEspaco);
+
+        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
+                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
+                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
+                solicitacaoEspaco.getStatusSolicitacao());
     }
 
     public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros){
