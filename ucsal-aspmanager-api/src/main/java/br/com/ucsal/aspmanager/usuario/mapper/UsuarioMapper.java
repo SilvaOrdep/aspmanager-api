@@ -30,6 +30,10 @@ public interface UsuarioMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "telefones", ignore = true)
+    @Mapping(target = "statusRegistro", ignore = true)
+    @Mapping(target = "senha", ignore = true)
+    @Mapping(target = "perfil", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
     void updateEntity(UpdateUsuarioRequest request, @MappingTarget Usuario usuario);
 
     @Mapping(target = "id", ignore = true)
