@@ -3,6 +3,7 @@ package br.com.ucsal.aspmanager.usuario.mapper;
 import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.shared.model.Telefone;
 import br.com.ucsal.aspmanager.usuario.dto.request.CreateUsuarioRequest;
+import br.com.ucsal.aspmanager.usuario.dto.request.UpdateProfessorRequest;
 import br.com.ucsal.aspmanager.usuario.dto.request.UpdateUsuarioRequest;
 import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
 import br.com.ucsal.aspmanager.usuario.model.Professor;
@@ -31,6 +32,11 @@ public interface UsuarioMapper {
     @Mapping(target = "telefones", ignore = true)
     void updateEntity(UpdateUsuarioRequest request, @MappingTarget Usuario usuario);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "usuario", ignore = true)
+    @Mapping(target = "escola", source = "idEscola", qualifiedByName = "escolaFromId")
+    void updateProfessor(UpdateProfessorRequest request, @MappingTarget Professor professor);
+
     default UsuarioResponse toResponse(Usuario usuario, Professor professor) {
         return new UsuarioResponse(
                 usuario.getId(),
@@ -53,6 +59,17 @@ public interface UsuarioMapper {
                 .escola(escola)
                 .matricula(matricula)
                 .build();
+    }
+
+    @Named("escolaFromId")
+    default Escola escolaFromId(Long idEscola) {
+        if (idEscola == null) {
+            return null;
+        }
+
+        Escola escola = new Escola();
+        escola.setId(idEscola);
+        return escola;
     }
 
     @Named("toTelefoneEntities")
@@ -95,5 +112,4 @@ public interface UsuarioMapper {
         }
     }
 }
-
 
