@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/*").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/usuarios/*/alterar-senha").authenticated()
 
+                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
