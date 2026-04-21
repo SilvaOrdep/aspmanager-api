@@ -8,10 +8,12 @@ import br.com.ucsal.aspmanager.espaco.dto.request.UpdateEspacoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.response.EspacoResponse;
 import br.com.ucsal.aspmanager.espaco.model.Espaco;
 import br.com.ucsal.aspmanager.espaco.repository.EspacoRepository;
+import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import br.com.ucsal.aspmanager.software.model.Software;
 import br.com.ucsal.aspmanager.software.repository.SoftwareRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -122,6 +124,18 @@ public class EspacoService implements ServiceBase<Long,
 
     @Override
     public void deletar(Long id) {
+
+        try{
+            espacos.deleteById(id);
+
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Espaço não encontrado!");
+        }catch(DataIntegrityViolationException e){
+            Espaco espaco = espacos.findById(id).orElseThrow(() ->
+                    new EntityNotFoundException("Espaço não encontrado!"));
+
+            espaco.setStatusRegistro(StatusRegistro.INATIVO);
+        }
 
     }
 }
