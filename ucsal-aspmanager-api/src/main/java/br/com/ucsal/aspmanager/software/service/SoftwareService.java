@@ -66,9 +66,20 @@ public class SoftwareService implements ServiceBase<Long,
 
     @Override
     public SoftwareResponse atualizar(Long id, UpdateSoftwareRequest updateSoftwareRequest) {
+        Software software = softwares.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Software não encontrado!"));
 
+        software.setNome(updateSoftwareRequest.nome());
+        software.setVersao(updateSoftwareRequest.versao());
+        software.setDataCadastro(updateSoftwareRequest.dataCadastro());
+        software.setTipoLicenca(updateSoftwareRequest.tipoLicenca());
+        software.setObjetivoUso(updateSoftwareRequest.objetivoUso());
+        software.setUrlDownload(updateSoftwareRequest.urlDownload());
 
-        return null;
+        return new SoftwareResponse(software.getId(), software.getNome(),
+                software.getVersao(), software.getUrlDownload(),
+                software.getTipoLicenca(), software.getObjetivoUso(),
+                software.getDataCadastro(), software.getStatusRegistro());
     }
 
     @Override
