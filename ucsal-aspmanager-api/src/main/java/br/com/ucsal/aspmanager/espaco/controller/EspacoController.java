@@ -9,6 +9,7 @@ import br.com.ucsal.aspmanager.espaco.dto.response.SolicitacaoResponse;
 import br.com.ucsal.aspmanager.espaco.service.EspacoService;
 import br.com.ucsal.aspmanager.shared.controller.AbstractCrudController;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
+import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -64,8 +65,8 @@ public class EspacoController extends AbstractCrudController<Long,
     }
 
     @PatchMapping("/solicitacao/{id}")
-    public ResponseEntity<SolicitacaoResponse> mudarStatusSolicitacao(@PathVariable Long id, StatusRegistro statusRegistro){
-        return ResponseEntity.ok(espacoService.mudarStatusSolicitacao(id, statusRegistro));
+    public ResponseEntity<SolicitacaoResponse> mudarStatusSolicitacao(@PathVariable Long id, StatusSolicitacao statusSolicitacao){
+        return ResponseEntity.ok(espacoService.mudarStatusSolicitacao(id, statusSolicitacao));
     }
 
     @DeleteMapping("/solicitacao/{id}")
