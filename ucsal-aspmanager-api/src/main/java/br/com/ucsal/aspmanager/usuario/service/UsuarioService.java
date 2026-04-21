@@ -25,6 +25,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 public class UsuarioService implements UserDetailsService, ServiceBase<Long, CreateUsuarioRequest, UpdateUsuarioRequest, UsuarioResponse> {
@@ -88,10 +91,12 @@ public class UsuarioService implements UserDetailsService, ServiceBase<Long, Cre
         Usuario usuarioExistente = usuarios.findUsuarioByEmail(updateUsuarioRequest.email()).orElse(null);
 
         if (usuarioExistente != null && !update.getEmail().equals(usuarioExistente.getEmail())) {
-            throw new RuntimeException("Já existe um usuário com esse email!");
+            throw new IllegalArgumentException("Já existe um usuário com esse email!");
         }
 
         usuarioMapper.updateEntity(updateUsuarioRequest, update);
+
+        atualizarTelefones(update, updateUsuarioRequest.telefones());
 
         return usuarioMapper.toResponse(usuarios.save(update));
     }
@@ -123,7 +128,7 @@ public class UsuarioService implements UserDetailsService, ServiceBase<Long, Cre
         Usuario usuario = buscarUsuarioPorId(usuarioId);
 
         if (!codificadorDeSenha.matches(request.senhaAntiga(), usuario.getSenha())) {
-            throw new RuntimeException("Senha atual incorreta!");
+            throw new IllegalArgumentException("Senha atual incorreta!");
         }
 
         usuario.setSenha(codificadorDeSenha.encode(request.senhaNova()));
@@ -142,7 +147,7 @@ public class UsuarioService implements UserDetailsService, ServiceBase<Long, Cre
         Professor professorExistente = professores.findByMatricula(updateProfessorRequest.matricula()).orElse(null);
 
         if (professorExistente != null && !update.getMatricula().equals(professorExistente.getMatricula())) {
-            throw new RuntimeException("Já existe um professor com essa matrícula!");
+            throw new IllegalArgumentException("Já existe um professor com essa matrícula!");
         }
 
         usuarioMapper.updateProfessor(updateProfessorRequest, update);
@@ -164,6 +169,23 @@ public class UsuarioService implements UserDetailsService, ServiceBase<Long, Cre
 
     private Usuario buscarUsuarioPorId(Long id) {
         return usuarios.findById(id).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado!"));
+    }
+
+    private void atualizarTelefones(Usuario usuario, List<String> telefones) {
+        if (telefones == null) {
+            return;
+        }
+
+        if (usuario.getTelefones() == null) {
+            usuario.setTelefones(new ArrayList<>());
+        }
+
+        usuario.getTelefones().clear();
+
+        usuarioMapper.toTelefoneEntities(telefones).forEach(telefone -> {
+            telefone.setUsuario(usuario);
+            usuario.getTelefones().add(telefone);
+        });
     }
 
 
