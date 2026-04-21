@@ -17,7 +17,7 @@ public record EspacoResponse(
         String tipoComputadores,
         TipoEspaco tipoEspaco,
         Escola escola,
-        List<Software> softwares,
+        List<Long> softwares,
         StatusRegistro statusRegistro
 ) {
 }
