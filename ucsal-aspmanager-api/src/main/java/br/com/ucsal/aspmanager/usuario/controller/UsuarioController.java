@@ -31,6 +31,11 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
         this.usuarioService = usuarioService;
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<UsuarioResponse> alterarStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(usuarioService.alterarStatusRegistro(id));
+    }
+
     @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
