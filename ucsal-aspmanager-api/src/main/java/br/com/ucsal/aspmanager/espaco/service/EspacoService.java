@@ -232,6 +232,12 @@ public class EspacoService implements ServiceBase<Long,
 
     public void deletarSolicitacao(Long id){
 
+        try{
+            solicitacoes.deleteById(id);
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("Espaço não encontrado!");
+        }
+
     }
 
 }
