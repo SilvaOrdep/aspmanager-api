@@ -33,8 +33,8 @@ public class EscolaService implements ServiceBase<Long,
 
     private final EscolaRepository escolas;
     private final DisciplinaRepository disciplinas;
-    private InstituicaoEnsinoRepository instituicoes;
-    private ProfessorRepository professores;
+    private final InstituicaoEnsinoRepository instituicoes;
+    private final ProfessorRepository professores;
 
     public EscolaService(EscolaRepository escolas, DisciplinaRepository disciplinas,
                          InstituicaoEnsinoRepository instituicoes, ProfessorRepository professores){
