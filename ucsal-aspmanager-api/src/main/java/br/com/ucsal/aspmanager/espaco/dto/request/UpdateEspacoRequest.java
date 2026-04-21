@@ -38,8 +38,6 @@ public record UpdateEspacoRequest(
         TipoEspaco tipoEspaco,
 
         @NotNull(message = "Escola associada ao espaço não pode ser nula!")
-        Long idEscola,
-
-        List<Software> softwares
+        Long idEscola
 ) {
 }
