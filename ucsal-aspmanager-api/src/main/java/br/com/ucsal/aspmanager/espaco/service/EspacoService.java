@@ -4,9 +4,12 @@ import br.com.ucsal.aspmanager.escola.model.Disciplina;
 import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.escola.repository.EscolaRepository;
 import br.com.ucsal.aspmanager.espaco.dto.request.CreateEspacoRequest;
+import br.com.ucsal.aspmanager.espaco.dto.request.CreateSolicitacaoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.request.UpdateEspacoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.response.EspacoResponse;
+import br.com.ucsal.aspmanager.espaco.dto.response.SolicitacaoResponse;
 import br.com.ucsal.aspmanager.espaco.model.Espaco;
+import br.com.ucsal.aspmanager.espaco.model.SolicitacaoEspaco;
 import br.com.ucsal.aspmanager.espaco.repository.EspacoRepository;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
@@ -138,4 +141,32 @@ public class EspacoService implements ServiceBase<Long,
         }
 
     }
+
+    public SolicitacaoResponse criarSolicitacao(CreateSolicitacaoRequest request){
+        return null;
+    }
+
+    public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros){
+
+        return null;
+    }
+
+    public SolicitacaoResponse buscarSolicitacao(Long id){
+
+        return null;
+    }
+
+    public SolicitacaoResponse atualizarSolicitacao(Long id){
+        return null;
+    }
+
+    public SolicitacaoResponse mudarStatusSolicitacao(Long id, StatusRegistro statusRegistro){
+
+        return null;
+    }
+
+    public void deletarSolicitacao(Long id){
+
+    }
+
 }
