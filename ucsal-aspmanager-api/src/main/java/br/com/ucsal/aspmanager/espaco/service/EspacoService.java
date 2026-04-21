@@ -97,7 +97,27 @@ public class EspacoService implements ServiceBase<Long,
 
     @Override
     public EspacoResponse atualizar(Long id, UpdateEspacoRequest request) {
-        return null;
+
+        Espaco espaco = espacos.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Espaço não encontrado!"));
+
+        Escola escola = escolas.findById(request.idEscola())
+                .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+
+        espaco.setSigla(request.sigla());
+        espaco.setNome(request.nome());
+        espaco.setDescricao(request.descricao());
+        espaco.setLocalizacao(request.localizacao());
+        espaco.setTipoComputadores(request.tipoComputadores());
+        espaco.setTipoEspaco(request.tipoEspaco());
+        espaco.setEscola(escola);
+        espaco.setCapacidadeMaxima(request.capacidadeMaxima());
+
+        return new EspacoResponse(espaco.getId(), espaco.getSigla(),
+                espaco.getNome(), espaco.getDescricao(), espaco.getCapacidadeMaxima(),
+                espaco.getLocalizacao(), espaco.getTipoComputadores(), espaco.getTipoEspaco(),
+                espaco.getEscola(), espaco.getSoftwares().stream().
+                map(Software::getId).toList(), espaco.getStatusRegistro());
     }
 
     @Override
