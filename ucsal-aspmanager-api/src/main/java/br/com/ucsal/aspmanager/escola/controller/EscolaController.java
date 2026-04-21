@@ -55,12 +55,12 @@ public class EscolaController extends AbstractCrudController<Long,
     }
 
     @PutMapping("disciplina/{id}")
-    public ResponseEntity<DisciplinaResponse> atualizarDisciplina(Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
+    public ResponseEntity<DisciplinaResponse> atualizarDisciplina(@PathVariable Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
         return ResponseEntity.ok(escolaService.atualizarDisciplina(id, updateDisciplinaRequest)) ;
     }
 
     @DeleteMapping("disciplina/{id}")
-    public ResponseEntity<Void> deletarDisciplina(Long id){
+    public ResponseEntity<Void> deletarDisciplina(@PathVariable Long id){
         escolaService.deletarDisciplina(id);
         return ResponseEntity.noContent().build();
     }
