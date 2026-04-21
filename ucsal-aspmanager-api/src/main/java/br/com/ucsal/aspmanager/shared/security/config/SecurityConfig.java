@@ -36,8 +36,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/auth/test").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/usuarios/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/usuarios/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/professores/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/professores/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/usuarios/professores/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/*").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/*").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/usuarios/*/alterar-senha").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
