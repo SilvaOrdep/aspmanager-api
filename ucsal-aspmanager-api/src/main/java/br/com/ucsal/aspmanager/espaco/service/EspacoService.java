@@ -177,13 +177,21 @@ public class EspacoService implements ServiceBase<Long,
     }
 
     public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros){
-
-        return null;
+        return solicitacoes.findAll(filtros).map(solicitacaoEspaco ->
+                new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
+                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
+                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
+                solicitacaoEspaco.getStatusSolicitacao()));
     }
 
     public SolicitacaoResponse buscarSolicitacao(Long id){
+        SolicitacaoEspaco solicitacaoEspaco = solicitacoes.findById(id).orElseThrow(()
+                -> new EntityNotFoundException("Solicitação não encontrada!"));
 
-        return null;
+        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
+                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
+                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
+                solicitacaoEspaco.getStatusSolicitacao());;
     }
 
     public SolicitacaoResponse atualizarSolicitacao(Long id, UpdateSolicitacaoRequest request){
