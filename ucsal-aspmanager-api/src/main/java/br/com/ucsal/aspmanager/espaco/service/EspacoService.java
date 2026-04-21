@@ -191,16 +191,43 @@ public class EspacoService implements ServiceBase<Long,
         return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
                 solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
                 solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
-                solicitacaoEspaco.getStatusSolicitacao());;
+                solicitacaoEspaco.getStatusSolicitacao());
     }
 
     public SolicitacaoResponse atualizarSolicitacao(Long id, UpdateSolicitacaoRequest request){
-        return null;
+
+        SolicitacaoEspaco solicitacaoEspaco = solicitacoes.findById(id).orElseThrow(()
+                -> new EntityNotFoundException("Solicitação não encontrada!"));
+
+        Professor professor = professores.findById(request.idProfessor()).orElseThrow(() ->
+                new EntityNotFoundException("Professor não encontrado!"));
+
+        Espaco espaco = espacos.findById(request.idEspaco()).orElseThrow(() ->
+                new EntityNotFoundException("Espaço não encontrado!"));
+
+        solicitacaoEspaco.setDataUso(request.dataUso());
+        solicitacaoEspaco.setHoraInicio(request.horaInicio());
+        solicitacaoEspaco.setHoraFim(request.horaFim());
+        solicitacaoEspaco.setStatusSolicitacao(request.statusSolicitacao());
+        solicitacaoEspaco.setProfessor(professor);
+        solicitacaoEspaco.setEspaco(espaco);
+
+        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
+                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
+                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
+                solicitacaoEspaco.getStatusSolicitacao());
     }
 
-    public SolicitacaoResponse mudarStatusSolicitacao(Long id, StatusRegistro statusRegistro){
+    public SolicitacaoResponse mudarStatusSolicitacao(Long id, StatusSolicitacao statusSolicitacao){
+        SolicitacaoEspaco solicitacaoEspaco = solicitacoes.findById(id).orElseThrow(()
+                -> new EntityNotFoundException("Solicitação não encontrada!"));
 
-        return null;
+        solicitacaoEspaco.setStatusSolicitacao(statusSolicitacao);
+
+        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
+                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
+                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
+                solicitacaoEspaco.getStatusSolicitacao());
     }
 
     public void deletarSolicitacao(Long id){
