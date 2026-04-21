@@ -38,13 +38,4 @@ public class AuthController {
         return ResponseEntity.ok(new TokenResponse(token));
     }
 
-    @GetMapping("/test")
-    public String teste() {
-        return "teste auth";
-    }
-
-    @GetMapping("/prof")
-    public String prof() {
-        return "teste auth professor";
-    }
 }
