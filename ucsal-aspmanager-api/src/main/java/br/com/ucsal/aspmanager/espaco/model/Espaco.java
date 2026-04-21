@@ -30,6 +30,7 @@ public class Espaco {
     private String localizacao;
     @Column(name = "status_registro")
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
     @Column(name = "tipo_computadores")
     private String tipoComputadores;

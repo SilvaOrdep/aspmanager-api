@@ -30,7 +30,7 @@ public class Escola {
     @JoinColumn(name = "id_instituicao", nullable = false)
     private InstituicaoEnsino instituicao;
     @OneToOne
-    @JoinColumn(name = "id_professor_coordenador", nullable = false)
+    @JoinColumn(name = "id_professor_coordenador")
     private Professor coordenador;
     @OneToMany(mappedBy = "escola")
     private List<Disciplina> disciplinas;
