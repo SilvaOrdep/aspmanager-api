@@ -3,11 +3,13 @@ package br.com.ucsal.aspmanager.software.model;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Builder
 @Data
 @Entity
 @Table(name = "softwares")
@@ -30,6 +32,7 @@ public class Software {
     private LocalDate dataCadastro;
     @Column(name = "status_registro")
     @Enumerated(EnumType.STRING)
-    private StatusRegistro statusRegistro;
+    @Builder.Default
+    private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
 
 }

@@ -5,11 +5,13 @@ import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoSolicitacaoSoftware;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@Builder
 @Data
 @Entity
 @Table(name = "solicitacoes_softwares")
