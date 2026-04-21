@@ -69,17 +69,30 @@ public class EspacoService implements ServiceBase<Long,
         return new EspacoResponse(espaco.getId(), espaco.getSigla(),
                 espaco.getNome(), espaco.getDescricao(), espaco.getCapacidadeMaxima(),
                 espaco.getLocalizacao(), espaco.getTipoComputadores(), espaco.getTipoEspaco(),
-                espaco.getEscola(), espaco.getSoftwares(), espaco.getStatusRegistro());
+                espaco.getEscola(), espaco.getSoftwares().stream().
+                map(Software::getId).toList(), espaco.getStatusRegistro());
     }
 
     @Override
     public Page<EspacoResponse> buscarTodos(Pageable filtros) {
-        return null;
+        return espacos.findAll(filtros).map(espaco ->
+                new EspacoResponse(espaco.getId(), espaco.getSigla(),
+                        espaco.getNome(), espaco.getDescricao(), espaco.getCapacidadeMaxima(),
+                        espaco.getLocalizacao(), espaco.getTipoComputadores(), espaco.getTipoEspaco(),
+                        espaco.getEscola(), espaco.getSoftwares().stream().
+                        map(Software::getId).toList(), espaco.getStatusRegistro()));
     }
 
     @Override
     public EspacoResponse buscar(Long id) {
-        return null;
+        Espaco espaco = espacos.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Espaço não encontrado!"));
+
+        return new EspacoResponse(espaco.getId(), espaco.getSigla(),
+                espaco.getNome(), espaco.getDescricao(), espaco.getCapacidadeMaxima(),
+                espaco.getLocalizacao(), espaco.getTipoComputadores(), espaco.getTipoEspaco(),
+                espaco.getEscola(), espaco.getSoftwares().stream().
+                map(Software::getId).toList(), espaco.getStatusRegistro());
     }
 
     @Override
