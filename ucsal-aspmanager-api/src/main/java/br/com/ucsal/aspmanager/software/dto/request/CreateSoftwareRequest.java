@@ -1,4 +1,6 @@
-package br.com.ucsal.aspmanager.software.dto;
+package br.com.ucsal.aspmanager.software.dto.request;
 
-public class CreateSoftwareRequest {
+public record CreateSoftwareRequest(
+
+) {
 }
