@@ -6,10 +6,10 @@ import br.com.ucsal.aspmanager.espaco.dto.response.EspacoResponse;
 import br.com.ucsal.aspmanager.espaco.model.Espaco;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+//@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)*
 public interface EspacoMapper {
 
-    @Mapping(target = "id", ignore = true)
+   /* @Mapping(target = "id", ignore = true)
     @Mapping(target = "sigla", ignore = true)
     @Mapping(target = "nome", ignore = true)
     @Mapping(target = "descricao", ignore = true)
@@ -34,5 +34,5 @@ public interface EspacoMapper {
         Espaco espaco = new Espaco();
         espaco.setId(idEspaco);
         return espaco;
-    }
+    }*/
 }
