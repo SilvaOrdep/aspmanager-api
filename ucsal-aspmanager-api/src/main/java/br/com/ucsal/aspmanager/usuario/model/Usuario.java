@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -36,8 +37,9 @@ public class Usuario implements UserDetails {
     @Column(name = "status_registro", nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusRegistro statusRegistro;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY)
-    private List<TelefoneUsuario> telefones;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "usuario", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<TelefoneUsuario> telefones = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
