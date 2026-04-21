@@ -1,4 +1,6 @@
-package br.com.ucsal.aspmanager.espaco.dto;
+package br.com.ucsal.aspmanager.espaco.dto.request;
 
-public class CreateSolicitacaoDTO {
+public record CreateSolicitacaoRequest(
+
+) {
 }
