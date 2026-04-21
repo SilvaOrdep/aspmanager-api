@@ -6,6 +6,7 @@ import br.com.ucsal.aspmanager.escola.repository.EscolaRepository;
 import br.com.ucsal.aspmanager.espaco.dto.request.CreateEspacoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.request.CreateSolicitacaoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.request.UpdateEspacoRequest;
+import br.com.ucsal.aspmanager.espaco.dto.request.UpdateSolicitacaoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.response.EspacoResponse;
 import br.com.ucsal.aspmanager.espaco.dto.response.SolicitacaoResponse;
 import br.com.ucsal.aspmanager.espaco.model.Espaco;
@@ -156,7 +157,7 @@ public class EspacoService implements ServiceBase<Long,
         return null;
     }
 
-    public SolicitacaoResponse atualizarSolicitacao(Long id){
+    public SolicitacaoResponse atualizarSolicitacao(Long id, UpdateSolicitacaoRequest request){
         return null;
     }
 
