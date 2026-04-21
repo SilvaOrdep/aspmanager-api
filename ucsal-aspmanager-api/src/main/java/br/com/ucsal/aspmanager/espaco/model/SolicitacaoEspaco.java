@@ -4,6 +4,7 @@ import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.time.LocalTime;
 @Table(name = "solicitacoes_espacos")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class SolicitacaoEspaco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

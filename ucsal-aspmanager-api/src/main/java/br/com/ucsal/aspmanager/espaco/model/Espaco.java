@@ -6,6 +6,7 @@ import br.com.ucsal.aspmanager.shared.model.enums.TipoEspaco;
 import br.com.ucsal.aspmanager.software.model.Software;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Table(name = "espacos")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Espaco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
