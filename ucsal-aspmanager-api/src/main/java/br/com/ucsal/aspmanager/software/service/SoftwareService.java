@@ -10,6 +10,7 @@ import br.com.ucsal.aspmanager.software.mapper.SoftwareMapper;
 import br.com.ucsal.aspmanager.software.mapper.SolicitacaoSoftwareMapper;
 import br.com.ucsal.aspmanager.software.model.Software;
 import br.com.ucsal.aspmanager.software.repository.SoftwareRepository;
+import br.com.ucsal.aspmanager.software.repository.SolicitacaoSoftwareRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -17,17 +18,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @Transactional(readOnly = true)
 public class SoftwareService implements ServiceBase<Long,
         CreateSoftwareRequest, UpdateSoftwareRequest, SoftwareResponse> {
 
     private final SoftwareRepository softwares;
+    private final SolicitacaoSoftwareRepository solicitacoesSoftware;
     private final SoftwareMapper softwareMapper;
     private final SolicitacaoSoftwareMapper solicitacaoSoftwareMapper;
 
-    public SoftwareService(SoftwareRepository softwares, SoftwareMapper softwareMapper, SolicitacaoSoftwareMapper solicitacaoSoftwareMapper) {
+    public SoftwareService(SoftwareRepository softwares, SolicitacaoSoftwareRepository solicitacoesSoftware, SoftwareMapper softwareMapper, SolicitacaoSoftwareMapper solicitacaoSoftwareMapper) {
         this.softwares = softwares;
+        this.solicitacoesSoftware = solicitacoesSoftware;
         this.softwareMapper = softwareMapper;
         this.solicitacaoSoftwareMapper = solicitacaoSoftwareMapper;
     }
@@ -37,6 +42,7 @@ public class SoftwareService implements ServiceBase<Long,
     public SoftwareResponse criar(CreateSoftwareRequest createSoftwareRequest) {
 
         Software software = softwareMapper.toEntity(createSoftwareRequest);
+        software.setDataCadastro(LocalDate.now());
 
         return softwareMapper.toResponse(softwares.save(software));
     }
