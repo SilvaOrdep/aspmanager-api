@@ -8,6 +8,7 @@ import br.com.ucsal.aspmanager.usuario.dto.request.UpdateProfessorRequest;
 import br.com.ucsal.aspmanager.usuario.dto.request.UpdateUsuarioRequest;
 import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
 import br.com.ucsal.aspmanager.usuario.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
     @Override
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
-    public ResponseEntity<UsuarioResponse> atualizar(@PathVariable Long id, @RequestBody UpdateUsuarioRequest request) {
+    public ResponseEntity<UsuarioResponse> atualizar(@PathVariable Long id, @RequestBody @Valid UpdateUsuarioRequest request) {
         UsuarioResponse usuarioAutenticado = usuarioAutenticado();
         validarAcessoAoUsuario(id, usuarioAutenticado);
         return ResponseEntity.ok(usuarioService.atualizar(id, request));
@@ -56,7 +57,7 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
 
     @PatchMapping("/{id}/alterar-senha")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
-    public ResponseEntity<Void> alterarSenha(@PathVariable Long id, @RequestBody AlterarSenhaRequest request) {
+    public ResponseEntity<Void> alterarSenha(@PathVariable Long id, @RequestBody @Valid AlterarSenhaRequest request) {
         UsuarioResponse usuarioAutenticado = usuarioAutenticado();
         validarAcessoAoUsuario(id, usuarioAutenticado);
         usuarioService.alterarSenha(request, id);
@@ -69,7 +70,7 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
     }
 
     @PutMapping("/professores/{idProfessor}")
-    public ResponseEntity<UsuarioResponse> atualizarProfessor(@PathVariable Long idProfessor, @RequestBody UpdateProfessorRequest request) {
+    public ResponseEntity<UsuarioResponse> atualizarProfessor(@PathVariable Long idProfessor, @RequestBody @Valid UpdateProfessorRequest request) {
         return ResponseEntity.ok(usuarioService.atualizarProfessor(idProfessor, request));
     }
 

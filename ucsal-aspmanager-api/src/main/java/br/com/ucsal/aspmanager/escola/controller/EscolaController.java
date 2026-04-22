@@ -56,7 +56,7 @@ public class EscolaController extends AbstractCrudController<Long,
     }
 
     @PutMapping("disciplina/{id}")
-    public ResponseEntity<DisciplinaResponse> atualizarDisciplina(@PathVariable Long id, UpdateDisciplinaRequest updateDisciplinaRequest) {
+    public ResponseEntity<DisciplinaResponse> atualizarDisciplina(@PathVariable Long id, @RequestBody @Valid UpdateDisciplinaRequest updateDisciplinaRequest) {
         return ResponseEntity.ok(escolaService.atualizarDisciplina(id, updateDisciplinaRequest));
     }
 

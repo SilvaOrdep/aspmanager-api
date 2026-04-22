@@ -14,7 +14,7 @@ import lombok.*;
 @Table(name = "telefones_instituicoes")
 public class TelefoneInstituicao extends Telefone {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_instituicao")
+    @JoinColumn(name = "id_instituicao", nullable = false)
     private InstituicaoEnsino instituicao;
 
 }

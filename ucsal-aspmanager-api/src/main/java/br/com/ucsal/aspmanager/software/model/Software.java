@@ -32,7 +32,7 @@ public class Software {
     private String objetivoUso;
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
-    @Column(name = "status_registro")
+    @Column(name = "status_registro", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
