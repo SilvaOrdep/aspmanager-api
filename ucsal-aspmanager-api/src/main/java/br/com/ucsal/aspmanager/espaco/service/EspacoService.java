@@ -17,6 +17,7 @@ import br.com.ucsal.aspmanager.espaco.repository.EspacoRepository;
 import br.com.ucsal.aspmanager.espaco.repository.SolicitacaoEspacoRepository;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
+import br.com.ucsal.aspmanager.shared.model.enums.TipoEspaco;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import br.com.ucsal.aspmanager.software.model.Software;
 import br.com.ucsal.aspmanager.software.repository.SoftwareRepository;
@@ -69,7 +70,7 @@ public class EspacoService implements ServiceBase<Long,
         List<Long> idsSoftwares = request.softwares();
         List<Software> softwares = new ArrayList<>();
 
-        if(!idsSoftwares.isEmpty()){
+        if(!idsSoftwares.isEmpty() && request.tipoEspaco().equals(TipoEspaco.LABORATORIO)){
 
             for(Long idSoftware : idsSoftwares){
 
