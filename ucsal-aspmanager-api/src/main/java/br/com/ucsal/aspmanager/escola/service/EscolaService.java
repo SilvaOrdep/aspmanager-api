@@ -6,6 +6,7 @@ import br.com.ucsal.aspmanager.escola.dto.request.UpdateDisciplinaRequest;
 import br.com.ucsal.aspmanager.escola.dto.request.UpdateEscolaRequest;
 import br.com.ucsal.aspmanager.escola.dto.response.DisciplinaResponse;
 import br.com.ucsal.aspmanager.escola.dto.response.EscolaResponse;
+import br.com.ucsal.aspmanager.escola.mapper.EscolaMapper;
 import br.com.ucsal.aspmanager.escola.model.Disciplina;
 import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.escola.repository.DisciplinaRepository;
@@ -37,13 +38,15 @@ public class EscolaService implements ServiceBase<Long,
     private final DisciplinaRepository disciplinas;
     private final InstituicaoEnsinoRepository instituicoes;
     private final ProfessorRepository professores;
+    private final EscolaMapper escolaMapper;
 
     public EscolaService(EscolaRepository escolas, DisciplinaRepository disciplinas,
-                         InstituicaoEnsinoRepository instituicoes, ProfessorRepository professores){
+                         InstituicaoEnsinoRepository instituicoes, ProfessorRepository professores, EscolaMapper escolaMapper){
         this.escolas = escolas;
         this.disciplinas = disciplinas;
         this.instituicoes = instituicoes;
         this.professores = professores;
+        this.escolaMapper = escolaMapper;
     }
 
     @Override
@@ -57,40 +60,28 @@ public class EscolaService implements ServiceBase<Long,
                 orElseThrow(() -> new EntityNotFoundException(("Professor não encontrado!")));
 
         List<Long> idsDisciplinas = createEscolaRequest.idsDisciplinas();
-        List<Disciplina> disciplinas = null;
+        List<Disciplina> disciplinas = new ArrayList<>();
 
         if(!idsDisciplinas.isEmpty()){
 
             for(Long idDisciplina : idsDisciplinas){
 
                 Optional <Disciplina> disciplina = this.disciplinas.findById(idDisciplina);
-                disciplina.ifPresent(value -> disciplinas.add(value));
+                disciplina.ifPresent(disciplinas::add);
 
             }
         }
 
-        Escola escola = Escola.builder().
-                nome(createEscolaRequest.nome()).
-                instituicao(instituicao).
-                statusRegistro(StatusRegistro.ATIVO).
-                coordenador(professor).
-                disciplinas(disciplinas).
-                build();
+        Escola escola = escolaMapper.toEntity(createEscolaRequest);
+        escola.setDisciplinas(disciplinas);
 
-        escolas.save(escola);
-
-        return new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
-                escola.getInstituicao().getId(), escola.getCoordenador().getId(),
-                escola.getDisciplinas().stream().map(Disciplina::getId).toList());
+        return escolaMapper.toResponse(escolas.save(escola));
     }
 
     @Override
     public Page<EscolaResponse> buscarTodos(Pageable filtros) {
 
-        return escolas.findAll(filtros).map(escola ->
-                new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
-                        escola.getInstituicao().getId(), escola.getCoordenador().getId(),
-                        escola.getDisciplinas().stream().map(Disciplina::getId).toList()));
+        return escolas.findAll(filtros).map(escolaMapper::toResponse);
     }
 
     @Override
@@ -99,9 +90,7 @@ public class EscolaService implements ServiceBase<Long,
         Escola escola = escolas.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
 
-        return new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
-                escola.getInstituicao().getId(), escola.getCoordenador().getId(),
-                escola.getDisciplinas().stream().map(Disciplina::getId).toList());
+        return escolaMapper.toResponse(escola);
     }
 
     @Override
@@ -117,13 +106,9 @@ public class EscolaService implements ServiceBase<Long,
         Professor professor = professores.findById(updateEscolaRequest.idCoordenador()).
                 orElseThrow(() -> new EntityNotFoundException(("Professor não encontrado!")));
 
-        escola.setNome(updateEscolaRequest.nome());
-        escola.setInstituicao(instituicao);
-        escola.setCoordenador(professor);
+        escolaMapper.updateEntity(updateEscolaRequest, escola);
 
-        return new EscolaResponse(escola.getId(), escola.getNome(), escola.getStatusRegistro(),
-                escola.getInstituicao().getId(), escola.getCoordenador().getId(),
-                escola.getDisciplinas().stream().map(Disciplina::getId).toList());
+        return escolaMapper.toResponse(escola);
     }
 
     @Override

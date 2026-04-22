@@ -6,6 +6,8 @@ import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import br.com.ucsal.aspmanager.software.dto.request.CreateSoftwareRequest;
 import br.com.ucsal.aspmanager.software.dto.request.UpdateSoftwareRequest;
 import br.com.ucsal.aspmanager.software.dto.response.SoftwareResponse;
+import br.com.ucsal.aspmanager.software.mapper.SoftwareMapper;
+import br.com.ucsal.aspmanager.software.mapper.SolicitacaoSoftwareMapper;
 import br.com.ucsal.aspmanager.software.model.Software;
 import br.com.ucsal.aspmanager.software.repository.SoftwareRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,39 +23,27 @@ public class SoftwareService implements ServiceBase<Long,
         CreateSoftwareRequest, UpdateSoftwareRequest, SoftwareResponse> {
 
     private final SoftwareRepository softwares;
+    private final SoftwareMapper softwareMapper;
+    private final SolicitacaoSoftwareMapper solicitacaoSoftwareMapper;
 
-    public SoftwareService(SoftwareRepository softwares) {
+    public SoftwareService(SoftwareRepository softwares, SoftwareMapper softwareMapper, SolicitacaoSoftwareMapper solicitacaoSoftwareMapper) {
         this.softwares = softwares;
+        this.softwareMapper = softwareMapper;
+        this.solicitacaoSoftwareMapper = solicitacaoSoftwareMapper;
     }
 
     @Override
     @Transactional
     public SoftwareResponse criar(CreateSoftwareRequest createSoftwareRequest) {
 
-        Software software = Software.builder().
-                nome(createSoftwareRequest.nome()).
-                versao(createSoftwareRequest.versao()).
-                dataCadastro(createSoftwareRequest.dataCadastro()).
-                urlDownload(createSoftwareRequest.urlDownload()).
-                objetivoUso(createSoftwareRequest.objetivoUso()).
-                tipoLicenca(createSoftwareRequest.tipoLicenca()).
-                build();
+        Software software = softwareMapper.toEntity(createSoftwareRequest);
 
-        softwares.save(software);
-
-        return new SoftwareResponse(software.getId(), software.getNome(),
-                software.getVersao(), software.getUrlDownload(),
-                software.getTipoLicenca(), software.getObjetivoUso(),
-                software.getDataCadastro(), software.getStatusRegistro());
+        return softwareMapper.toResponse(softwares.save(software));
     }
 
     @Override
     public Page<SoftwareResponse> buscarTodos(Pageable filtros) {
-        return softwares.findAll(filtros).map(software ->
-                new SoftwareResponse(software.getId(), software.getNome(),
-                software.getVersao(), software.getUrlDownload(),
-                software.getTipoLicenca(), software.getObjetivoUso(),
-                software.getDataCadastro(), software.getStatusRegistro()));
+        return softwares.findAll(filtros).map(softwareMapper::toResponse);
     }
 
     @Override
@@ -61,10 +51,7 @@ public class SoftwareService implements ServiceBase<Long,
         Software software = softwares.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Software não encontrado!"));
 
-        return new SoftwareResponse(software.getId(), software.getNome(),
-                software.getVersao(), software.getUrlDownload(),
-                software.getTipoLicenca(), software.getObjetivoUso(),
-                software.getDataCadastro(), software.getStatusRegistro());
+        return softwareMapper.toResponse(software);
     }
 
     @Override
@@ -73,17 +60,9 @@ public class SoftwareService implements ServiceBase<Long,
         Software software = softwares.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Software não encontrado!"));
 
-        software.setNome(updateSoftwareRequest.nome());
-        software.setVersao(updateSoftwareRequest.versao());
-        software.setDataCadastro(updateSoftwareRequest.dataCadastro());
-        software.setTipoLicenca(updateSoftwareRequest.tipoLicenca());
-        software.setObjetivoUso(updateSoftwareRequest.objetivoUso());
-        software.setUrlDownload(updateSoftwareRequest.urlDownload());
+        softwareMapper.updateEntity(updateSoftwareRequest, software);
 
-        return new SoftwareResponse(software.getId(), software.getNome(),
-                software.getVersao(), software.getUrlDownload(),
-                software.getTipoLicenca(), software.getObjetivoUso(),
-                software.getDataCadastro(), software.getStatusRegistro());
+        return softwareMapper.toResponse(software);
     }
 
     @Override

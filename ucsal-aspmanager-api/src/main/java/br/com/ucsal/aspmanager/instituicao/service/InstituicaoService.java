@@ -3,6 +3,7 @@ package br.com.ucsal.aspmanager.instituicao.service;
 import br.com.ucsal.aspmanager.instituicao.dto.request.CreateInstituicaoEnsinoRequest;
 import br.com.ucsal.aspmanager.instituicao.dto.request.UpdateInstituicaoEnsinoRequest;
 import br.com.ucsal.aspmanager.instituicao.dto.response.InstituicaoEnsinoResponse;
+import br.com.ucsal.aspmanager.instituicao.mapper.InstituicaoEnsinoMapper;
 import br.com.ucsal.aspmanager.instituicao.model.InstituicaoEnsino;
 import br.com.ucsal.aspmanager.instituicao.model.TelefoneInstituicao;
 import br.com.ucsal.aspmanager.instituicao.repository.InstituicaoEnsinoRepository;
@@ -26,20 +27,19 @@ public class InstituicaoService implements ServiceBase<Long,
 
     private final InstituicaoEnsinoRepository instituicoes;
     private final TelefoneInstituicaoRepository telefonesInstituicao;
+    private final InstituicaoEnsinoMapper instituicaoEnsinoMapper;
 
-    public InstituicaoService(InstituicaoEnsinoRepository instituicoes, TelefoneInstituicaoRepository telefonesInstituicao){
+    public InstituicaoService(InstituicaoEnsinoRepository instituicoes, TelefoneInstituicaoRepository telefonesInstituicao, InstituicaoEnsinoMapper instituicaoEnsinoMapper){
         this.instituicoes = instituicoes;
         this.telefonesInstituicao = telefonesInstituicao;
+        this.instituicaoEnsinoMapper = instituicaoEnsinoMapper;
     }
 
     @Override
     @Transactional
     public InstituicaoEnsinoResponse criar(CreateInstituicaoEnsinoRequest createInstituicaoEnsinoRequest) {
 
-        InstituicaoEnsino instituicao = InstituicaoEnsino.builder()
-                .nome(createInstituicaoEnsinoRequest.nome())
-                .endereco(createInstituicaoEnsinoRequest.endereco())
-                .telefones(new ArrayList<>()).build();
+        InstituicaoEnsino instituicao = instituicaoEnsinoMapper.toEntity(createInstituicaoEnsinoRequest);
 
         if (createInstituicaoEnsinoRequest.telefones() != null && !createInstituicaoEnsinoRequest.telefones().isEmpty()) {
             for(String telefone : createInstituicaoEnsinoRequest.telefones()) {
@@ -47,18 +47,12 @@ public class InstituicaoService implements ServiceBase<Long,
             }
         }
 
-        instituicoes.save(instituicao);
-
-        return new InstituicaoEnsinoResponse(instituicao.getId(), instituicao.getNome(),
-                instituicao.getEndereco(), instituicao.getTelefones().stream().map(Telefone::getNumero).toList());
+        return instituicaoEnsinoMapper.toResponse(instituicoes.save(instituicao));
     }
 
     @Override
     public Page<InstituicaoEnsinoResponse> buscarTodos(Pageable filtros) {
-
-        return instituicoes.findAll(filtros).map(instituicao ->
-                new InstituicaoEnsinoResponse(instituicao.getId(), instituicao.getNome(),
-                instituicao.getEndereco(), instituicao.getTelefones().stream().map(Telefone::getNumero).toList()));
+        return instituicoes.findAll(filtros).map(instituicaoEnsinoMapper::toResponse);
     }
 
     @Override
@@ -67,8 +61,7 @@ public class InstituicaoService implements ServiceBase<Long,
         InstituicaoEnsino instituicao = instituicoes.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Instituição de Ensino não encontrada!"));
 
-        return new InstituicaoEnsinoResponse(instituicao.getId(), instituicao.getNome(),
-                instituicao.getEndereco(), instituicao.getTelefones().stream().map(Telefone::getNumero).toList());
+        return instituicaoEnsinoMapper.toResponse(instituicao);
     }
 
     @Override
@@ -90,8 +83,7 @@ public class InstituicaoService implements ServiceBase<Long,
             instituicao.setTelefones(telefonesIES);
 
         }
-        return new InstituicaoEnsinoResponse(instituicao.getId(), instituicao.getNome(),
-                instituicao.getEndereco(), instituicao.getTelefones().stream().map(Telefone::getNumero).toList());
+        return instituicaoEnsinoMapper.toResponse(instituicao);
     }
 
     @Override
@@ -107,7 +99,8 @@ public class InstituicaoService implements ServiceBase<Long,
         }
     }
 
-    private void criarTelefoneParaIES(String telefone, InstituicaoEnsino instituicaoEnsino) {
+    @Transactional
+    protected void criarTelefoneParaIES(String telefone, InstituicaoEnsino instituicaoEnsino) {
         String telefoneLimpo = telefone.replaceAll("[()\\s-]","");
         if (telefoneLimpo.matches("\\d{10,11}")) {
             TelefoneInstituicao telefoneInstituicao = new TelefoneInstituicao();

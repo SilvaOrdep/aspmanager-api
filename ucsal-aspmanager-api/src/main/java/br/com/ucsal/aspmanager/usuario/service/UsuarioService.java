@@ -171,7 +171,8 @@ public class UsuarioService implements UserDetailsService, ServiceBase<Long, Cre
         return usuarios.findById(id).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado!"));
     }
 
-    private void atualizarTelefones(Usuario usuario, List<String> telefones) {
+    @Transactional
+    protected void atualizarTelefones(Usuario usuario, List<String> telefones) {
         if (telefones == null) {
             return;
         }
