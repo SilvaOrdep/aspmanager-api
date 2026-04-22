@@ -8,17 +8,17 @@ import br.com.ucsal.aspmanager.espaco.dto.response.EspacoResponse;
 import br.com.ucsal.aspmanager.espaco.dto.response.SolicitacaoResponse;
 import br.com.ucsal.aspmanager.espaco.service.EspacoService;
 import br.com.ucsal.aspmanager.shared.controller.AbstractCrudController;
-import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
-import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
-import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @RestController
 @RequestMapping("/api/v1/espaco")
@@ -52,6 +52,16 @@ public class EspacoController extends AbstractCrudController<Long,
     @GetMapping("/solicitacao")
     public ResponseEntity<Page<SolicitacaoResponse>> buscarSolicitacao(Pageable filtros){
         return ResponseEntity.ok(espacoService.buscarSolicitacao(filtros));
+    }
+
+    @GetMapping("/disponiveis")
+    public ResponseEntity<Page<EspacoResponse>> buscarDisponiveis(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataUso,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaInicio,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaFim,
+            Pageable filtros
+    ) {
+        return ResponseEntity.ok(espacoService.buscarDisponiveis(dataUso, horaInicio, horaFim, filtros));
     }
 
     @GetMapping("/solicitacao/{id}")
