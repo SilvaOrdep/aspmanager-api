@@ -29,6 +29,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -143,6 +145,19 @@ public class EspacoService implements ServiceBase<Long,
         solicitacaoEspaco.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
 
         return solicitacaoMapper.toResponse(solicitacoes.save(solicitacaoEspaco));
+    }
+
+    public Page<EspacoResponse> buscarDisponiveis(LocalDate dataUso, LocalTime horaInicio, LocalTime horaFim, Pageable filtros) {
+        if (dataUso == null || horaInicio == null || horaFim == null) {
+            throw new IllegalArgumentException("Data e horários são obrigatórios!");
+        }
+
+        if (!horaInicio.isBefore(horaFim)) {
+            throw new IllegalArgumentException("A hora de início deve ser anterior à hora de fim!");
+        }
+
+        return espacos.buscarDisponiveisNoPeriodo(dataUso, horaInicio, horaFim, StatusRegistro.ATIVO, StatusSolicitacao.APROVADO, filtros)
+                .map(espacoMapper::toResponse);
     }
 
     public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros){
