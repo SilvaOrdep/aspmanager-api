@@ -1,5 +1,6 @@
 package br.com.ucsal.aspmanager.software.model;
 
+import br.com.ucsal.aspmanager.escola.model.Disciplina;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @Data
@@ -34,5 +36,12 @@ public class Software {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
+    @ManyToMany
+    @JoinTable(
+            name = "softwares_disciplinas",
+            joinColumns = @JoinColumn(name = "id_software"),
+            inverseJoinColumns = @JoinColumn(name = "id_disciplina")
+    )
+    private List<Disciplina> disciplinas;
 
 }
