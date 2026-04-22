@@ -9,6 +9,7 @@ import br.com.ucsal.aspmanager.espaco.dto.request.UpdateEspacoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.request.UpdateSolicitacaoRequest;
 import br.com.ucsal.aspmanager.espaco.dto.response.EspacoResponse;
 import br.com.ucsal.aspmanager.espaco.dto.response.SolicitacaoResponse;
+import br.com.ucsal.aspmanager.espaco.mapper.SolicitacaoMapper;
 import br.com.ucsal.aspmanager.espaco.model.Espaco;
 import br.com.ucsal.aspmanager.espaco.model.SolicitacaoEspaco;
 import br.com.ucsal.aspmanager.espaco.repository.EspacoRepository;
@@ -38,13 +39,15 @@ public class EspacoService implements ServiceBase<Long,
     private final EscolaRepository escolas;
     private final SoftwareRepository softwares;
     private final ProfessorRepository professores;
+    private final SolicitacaoMapper solicitacaoMapper;
 
-    public EspacoService(EspacoRepository espacos, SolicitacaoEspacoRepository solicitacoes, EscolaRepository escolas, SoftwareRepository softwares, ProfessorRepository professores) {
+    public EspacoService(EspacoRepository espacos, SolicitacaoEspacoRepository solicitacoes, EscolaRepository escolas, SoftwareRepository softwares, ProfessorRepository professores, SolicitacaoMapper solicitacaoMapper) {
         this.espacos = espacos;
         this.solicitacoes = solicitacoes;
         this.escolas = escolas;
         this.softwares = softwares;
         this.professores = professores;
+        this.solicitacaoMapper = solicitacaoMapper;
     }
 
     @Override
@@ -159,39 +162,22 @@ public class EspacoService implements ServiceBase<Long,
         Espaco espaco = espacos.findById(request.idEspaco()).orElseThrow(() ->
                 new EntityNotFoundException("Espaço não encontrado!"));
 
-        SolicitacaoEspaco solicitacaoEspaco = SolicitacaoEspaco.builder().
-                dataUso(request.dataUso()).
-                horaInicio(request.horaInicio()).
-                horaFim(request.horaFim()).
-                professor(professor).
-                espaco(espaco).
-                statusSolicitacao(StatusSolicitacao.PENDENTE).
-                build();
+        SolicitacaoEspaco solicitacaoEspaco = solicitacaoMapper.toEntity(request);
 
-        solicitacoes.save(solicitacaoEspaco);
+        solicitacaoEspaco.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
 
-        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
-                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
-                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
-                solicitacaoEspaco.getStatusSolicitacao());
+        return solicitacaoMapper.toResponse(solicitacoes.save(solicitacaoEspaco));
     }
 
     public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros){
-        return solicitacoes.findAll(filtros).map(solicitacaoEspaco ->
-                new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
-                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
-                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
-                solicitacaoEspaco.getStatusSolicitacao()));
+        return solicitacoes.findAll(filtros).map(solicitacaoMapper::toResponse);
     }
 
     public SolicitacaoResponse buscarSolicitacao(Long id){
         SolicitacaoEspaco solicitacaoEspaco = solicitacoes.findById(id).orElseThrow(()
                 -> new EntityNotFoundException("Solicitação não encontrada!"));
 
-        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
-                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
-                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
-                solicitacaoEspaco.getStatusSolicitacao());
+        return solicitacaoMapper.toResponse(solicitacaoEspaco);
     }
 
     public SolicitacaoResponse atualizarSolicitacao(Long id, UpdateSolicitacaoRequest request){
@@ -205,30 +191,11 @@ public class EspacoService implements ServiceBase<Long,
         Espaco espaco = espacos.findById(request.idEspaco()).orElseThrow(() ->
                 new EntityNotFoundException("Espaço não encontrado!"));
 
-        solicitacaoEspaco.setDataUso(request.dataUso());
-        solicitacaoEspaco.setHoraInicio(request.horaInicio());
-        solicitacaoEspaco.setHoraFim(request.horaFim());
         solicitacaoEspaco.setStatusSolicitacao(request.statusSolicitacao());
-        solicitacaoEspaco.setProfessor(professor);
-        solicitacaoEspaco.setEspaco(espaco);
 
-        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
-                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
-                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
-                solicitacaoEspaco.getStatusSolicitacao());
+        return solicitacaoMapper.toResponse(solicitacaoEspaco);
     }
 
-    public SolicitacaoResponse mudarStatusSolicitacao(Long id, StatusSolicitacao statusSolicitacao){
-        SolicitacaoEspaco solicitacaoEspaco = solicitacoes.findById(id).orElseThrow(()
-                -> new EntityNotFoundException("Solicitação não encontrada!"));
-
-        solicitacaoEspaco.setStatusSolicitacao(statusSolicitacao);
-
-        return new SolicitacaoResponse(solicitacaoEspaco.getId(), solicitacaoEspaco.getDataUso(),
-                solicitacaoEspaco.getHoraInicio(), solicitacaoEspaco.getHoraFim(),
-                solicitacaoEspaco.getEspaco().getId(), solicitacaoEspaco.getProfessor().getId(),
-                solicitacaoEspaco.getStatusSolicitacao());
-    }
 
     public void deletarSolicitacao(Long id){
 
