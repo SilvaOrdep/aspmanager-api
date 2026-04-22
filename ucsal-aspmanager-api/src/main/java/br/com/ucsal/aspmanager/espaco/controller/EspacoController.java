@@ -38,19 +38,19 @@ public class EspacoController extends AbstractCrudController<Long,
     }
 
     @PostMapping("/solicitacao")
-    public ResponseEntity<SolicitacaoResponse> criarSolicitacao(@Valid @RequestBody CreateSolicitacaoRequest createSolicitacao, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<SolicitacaoResponse> criarSolicitacao(@Valid @RequestBody CreateSolicitacaoRequest createSolicitacao, UriComponentsBuilder uriBuilder) {
         SolicitacaoResponse solicitacaoResponse = espacoService.criarSolicitacao(createSolicitacao);
         URI uri = espacoLocation(solicitacaoResponse, uriBuilder);
 
         return ResponseEntity.created(uri).body(solicitacaoResponse);
     }
 
-    protected URI espacoLocation(SolicitacaoResponse solicitacao, UriComponentsBuilder uriBuilder){
+    protected URI espacoLocation(SolicitacaoResponse solicitacao, UriComponentsBuilder uriBuilder) {
         return uriBuilder.path("/api/v1/espaco/solicitacao{id}").buildAndExpand(solicitacao.idSolicitacao()).toUri();
     }
 
     @GetMapping("/solicitacao")
-    public ResponseEntity<Page<SolicitacaoResponse>> buscarSolicitacao(Pageable filtros){
+    public ResponseEntity<Page<SolicitacaoResponse>> buscarSolicitacao(Pageable filtros) {
         return ResponseEntity.ok(espacoService.buscarSolicitacao(filtros));
     }
 
@@ -65,17 +65,17 @@ public class EspacoController extends AbstractCrudController<Long,
     }
 
     @GetMapping("/solicitacao/{id}")
-    public ResponseEntity<SolicitacaoResponse> buscarSolicitacao(@PathVariable Long id){
+    public ResponseEntity<SolicitacaoResponse> buscarSolicitacao(@PathVariable Long id) {
         return ResponseEntity.ok(espacoService.buscarSolicitacao(id));
     }
 
     @PutMapping("/solicitacao/{id}")
-    public ResponseEntity<SolicitacaoResponse> atualizarSolicitacao(@PathVariable Long id, UpdateSolicitacaoRequest request){
+    public ResponseEntity<SolicitacaoResponse> atualizarSolicitacao(@PathVariable Long id, UpdateSolicitacaoRequest request) {
         return ResponseEntity.ok(espacoService.atualizarSolicitacao(id, request));
     }
 
     @DeleteMapping("/solicitacao/{id}")
-    public ResponseEntity<Void> deletarSolicitacao(@PathVariable Long id){
+    public ResponseEntity<Void> deletarSolicitacao(@PathVariable Long id) {
         espacoService.deletarSolicitacao(id);
         return ResponseEntity.noContent().build();
     }

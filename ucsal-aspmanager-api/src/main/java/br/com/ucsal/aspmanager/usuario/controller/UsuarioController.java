@@ -8,12 +8,12 @@ import br.com.ucsal.aspmanager.usuario.dto.request.UpdateProfessorRequest;
 import br.com.ucsal.aspmanager.usuario.dto.request.UpdateUsuarioRequest;
 import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
 import br.com.ucsal.aspmanager.usuario.service.UsuarioService;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 

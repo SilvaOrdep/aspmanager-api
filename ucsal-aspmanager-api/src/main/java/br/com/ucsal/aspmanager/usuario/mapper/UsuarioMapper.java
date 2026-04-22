@@ -9,12 +9,7 @@ import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
 import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.usuario.model.TelefoneUsuario;
 import br.com.ucsal.aspmanager.usuario.model.Usuario;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

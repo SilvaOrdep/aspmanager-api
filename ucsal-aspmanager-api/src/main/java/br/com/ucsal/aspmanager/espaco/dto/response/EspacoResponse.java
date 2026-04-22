@@ -3,7 +3,6 @@ package br.com.ucsal.aspmanager.espaco.dto.response;
 import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoEspaco;
-import br.com.ucsal.aspmanager.software.model.Software;
 
 import java.util.List;
 

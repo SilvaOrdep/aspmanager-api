@@ -41,7 +41,7 @@ public class EscolaService implements ServiceBase<Long,
     private final EscolaMapper escolaMapper;
 
     public EscolaService(EscolaRepository escolas, DisciplinaRepository disciplinas,
-                         InstituicaoEnsinoRepository instituicoes, ProfessorRepository professores, EscolaMapper escolaMapper){
+                         InstituicaoEnsinoRepository instituicoes, ProfessorRepository professores, EscolaMapper escolaMapper) {
         this.escolas = escolas;
         this.disciplinas = disciplinas;
         this.instituicoes = instituicoes;
@@ -62,11 +62,11 @@ public class EscolaService implements ServiceBase<Long,
         List<Long> idsDisciplinas = createEscolaRequest.idsDisciplinas();
         List<Disciplina> disciplinas = new ArrayList<>();
 
-        if(!idsDisciplinas.isEmpty()){
+        if (!idsDisciplinas.isEmpty()) {
 
-            for(Long idDisciplina : idsDisciplinas){
+            for (Long idDisciplina : idsDisciplinas) {
 
-                Optional <Disciplina> disciplina = this.disciplinas.findById(idDisciplina);
+                Optional<Disciplina> disciplina = this.disciplinas.findById(idDisciplina);
                 disciplina.ifPresent(disciplinas::add);
 
             }
@@ -115,20 +115,20 @@ public class EscolaService implements ServiceBase<Long,
     @Transactional
     public void deletar(Long id) {
 
-        try{
+        try {
             escolas.deleteById(id);
 
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
 
             Escola escola = escolas.findById(id).orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
             escola.setStatusRegistro(StatusRegistro.INATIVO);
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Escola não encontrada!");
         }
     }
 
     @Transactional
-    public DisciplinaResponse criarDisciplina(CreateDisciplinaRequest createDisciplinaRequest){
+    public DisciplinaResponse criarDisciplina(CreateDisciplinaRequest createDisciplinaRequest) {
 
         Escola escola = escolas.findById(createDisciplinaRequest.idEscola()).
                 orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
@@ -145,12 +145,12 @@ public class EscolaService implements ServiceBase<Long,
                 disciplina.getDescricao(), disciplina.getEscola().getId());
     }
 
-    public Page<DisciplinaResponse> buscarDisciplina(Pageable filtros){
+    public Page<DisciplinaResponse> buscarDisciplina(Pageable filtros) {
         return disciplinas.findAll(filtros).map(disciplina -> new DisciplinaResponse(disciplina.getId(),
                 disciplina.getNome(), disciplina.getDescricao(), disciplina.getEscola().getId()));
     }
 
-    public DisciplinaResponse buscarDisciplina(Long id){
+    public DisciplinaResponse buscarDisciplina(Long id) {
 
         Disciplina disciplina = disciplinas.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada!"));
@@ -160,7 +160,7 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     @Transactional
-    public DisciplinaResponse atualizarDisciplina(Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
+    public DisciplinaResponse atualizarDisciplina(Long id, UpdateDisciplinaRequest updateDisciplinaRequest) {
 
         Disciplina disciplina = disciplinas.findById(id).
                 orElseThrow(() -> new EntityNotFoundException("Disciplina não encontrada!"));
@@ -177,12 +177,12 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     @Transactional
-    public void deletarDisciplina (Long id){
-        try{
+    public void deletarDisciplina(Long id) {
+        try {
             disciplinas.deleteById(id);
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("A Instituição de Ensino está associada a alguma Escola!");
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Disciplina não encontrada!");
         }
 

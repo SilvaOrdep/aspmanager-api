@@ -9,19 +9,18 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 public record CreateUsuarioRequest(
-    @NotBlank(message = "Nome completo é obrigatório") @Size(min = 3, max = 254, message = "Nome completo deve ter entre 3 e 254 caracteres") String nomeCompleto,
+        @NotBlank(message = "Nome completo é obrigatório") @Size(min = 3, max = 254, message = "Nome completo deve ter entre 3 e 254 caracteres") String nomeCompleto,
 
-    @NotBlank(message = "Email é obrigatório") @Email(message = "Email inválido") String email,
+        @NotBlank(message = "Email é obrigatório") @Email(message = "Email inválido") String email,
 
-    @NotBlank(message = "Senha é obrigatória") @Size(min = 6, max = 30, message = "Senha deve ter entre 6 e 30 caracteres") String senha,
+        @NotBlank(message = "Senha é obrigatória") @Size(min = 6, max = 30, message = "Senha deve ter entre 6 e 30 caracteres") String senha,
 
-    @NotNull(message = "Perfil é obrigatório") Perfil perfil,
+        @NotNull(message = "Perfil é obrigatório") Perfil perfil,
 
-    Long idEscola,
+        Long idEscola,
 
-    String matricula,
+        String matricula,
 
-    List<String> telefones
+        List<String> telefones
 ) {
 }
-// Ajustar depois a questão dos telefones

@@ -41,8 +41,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
+                        // ADMIN
                         .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuarios").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/usuarios/*").hasRole("ADMIN")
@@ -50,23 +52,57 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/professores/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/professores/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/usuarios/professores/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/escola/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/escola/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/escola/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/escola/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/instituicao/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/instituicao/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/instituicao/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/instituicao/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/espaco").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/espaco/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/espaco/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/espaco/*").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/software").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/software/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/software/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/software/*").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/v1/espaco/solicitacao").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/espaco/solicitacao/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/espaco/solicitacao/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/espaco/solicitacao/*").hasRole("ADMIN")
+
+                        // PROFESSOR
+                        .requestMatchers(HttpMethod.POST, "/api/v1/software/solicitacoes").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/minhas").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/espaco/solicitacao").hasRole("PROFESSOR")
+
+                        // AMBOS
+                        .requestMatchers(HttpMethod.GET, "/api/v1/escola/**").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/instituicao/**").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/espaco").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/espaco/*").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/espaco/disponiveis").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/*").hasAnyRole("ADMIN", "PROFESSOR")
+
+                        // Dados do próprio usuário
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/*").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/*").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/usuarios/*/alterar-senha").authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/api/v1/software/solicitacoes").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/minhas").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.POST, "/api/v1/software").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/software/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/software/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/software/**").authenticated()
-
-                        .requestMatchers(SWAGGER_WHITELIST).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().denyAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -7,12 +7,12 @@ import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoSolicitacaoSoftware;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
-import br.com.ucsal.aspmanager.software.dto.request.CreateSolicitacaoSoftwareRequest;
 import br.com.ucsal.aspmanager.software.dto.request.CreateSoftwareRequest;
-import br.com.ucsal.aspmanager.software.dto.request.UpdateSolicitacaoSoftwareRequest;
+import br.com.ucsal.aspmanager.software.dto.request.CreateSolicitacaoSoftwareRequest;
 import br.com.ucsal.aspmanager.software.dto.request.UpdateSoftwareRequest;
-import br.com.ucsal.aspmanager.software.dto.response.SolicitacaoSoftwareResponse;
+import br.com.ucsal.aspmanager.software.dto.request.UpdateSolicitacaoSoftwareRequest;
 import br.com.ucsal.aspmanager.software.dto.response.SoftwareResponse;
+import br.com.ucsal.aspmanager.software.dto.response.SolicitacaoSoftwareResponse;
 import br.com.ucsal.aspmanager.software.mapper.SoftwareMapper;
 import br.com.ucsal.aspmanager.software.mapper.SolicitacaoSoftwareMapper;
 import br.com.ucsal.aspmanager.software.model.Software;
@@ -30,10 +30,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.time.LocalDate;
 
 @Service
 @Transactional(readOnly = true)
@@ -99,12 +99,12 @@ public class SoftwareService implements ServiceBase<Long,
     @Transactional
     public void deletar(Long id) {
 
-        try{
+        try {
             softwares.deleteById(id);
 
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Software não encontrado!");
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             Software software = softwares.findById(id).orElseThrow(() ->
                     new EntityNotFoundException("Software não encontrado!"));
 

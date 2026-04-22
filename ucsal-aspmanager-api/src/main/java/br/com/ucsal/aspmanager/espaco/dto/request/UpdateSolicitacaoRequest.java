@@ -3,9 +3,6 @@ package br.com.ucsal.aspmanager.espaco.dto.request;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public record UpdateSolicitacaoRequest(
         @NotNull(message = "Id do espaço não pode ser nulo!")
         Long idEspaco,
