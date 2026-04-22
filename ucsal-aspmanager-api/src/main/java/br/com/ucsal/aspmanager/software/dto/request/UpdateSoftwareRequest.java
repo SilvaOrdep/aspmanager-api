@@ -1,10 +1,7 @@
 package br.com.ucsal.aspmanager.software.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import java.time.LocalDate;
 
 public record UpdateSoftwareRequest(
         @NotBlank(message = "Nome do Software é obrigatório!")

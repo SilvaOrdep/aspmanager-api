@@ -5,12 +5,7 @@ import br.com.ucsal.aspmanager.instituicao.dto.request.UpdateInstituicaoEnsinoRe
 import br.com.ucsal.aspmanager.instituicao.dto.response.InstituicaoEnsinoResponse;
 import br.com.ucsal.aspmanager.instituicao.model.InstituicaoEnsino;
 import br.com.ucsal.aspmanager.instituicao.model.TelefoneInstituicao;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

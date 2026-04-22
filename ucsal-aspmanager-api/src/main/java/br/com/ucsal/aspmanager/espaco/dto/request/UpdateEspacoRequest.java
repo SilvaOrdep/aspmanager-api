@@ -1,14 +1,10 @@
 package br.com.ucsal.aspmanager.espaco.dto.request;
 
-import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoEspaco;
-import br.com.ucsal.aspmanager.software.model.Software;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import java.util.List;
 
 public record UpdateEspacoRequest(
 

@@ -1,7 +1,6 @@
 package br.com.ucsal.aspmanager.espaco.dto.response;
 
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

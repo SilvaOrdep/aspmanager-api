@@ -1,6 +1,5 @@
 package br.com.ucsal.aspmanager.escola.dto.request;
 
-import br.com.ucsal.aspmanager.escola.model.Escola;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

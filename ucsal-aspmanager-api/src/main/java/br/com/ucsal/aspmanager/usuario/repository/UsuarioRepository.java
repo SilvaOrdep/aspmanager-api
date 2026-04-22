@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findUsuarioByEmail(String email);
+
     Page<Usuario> findByStatusRegistro(StatusRegistro statusRegistro, Pageable pageable);
 
 }

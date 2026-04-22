@@ -1,7 +1,7 @@
 package br.com.ucsal.aspmanager.espaco.model;
 
-import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
+import br.com.ucsal.aspmanager.usuario.model.Professor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

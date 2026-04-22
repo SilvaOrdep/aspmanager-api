@@ -1,6 +1,5 @@
 package br.com.ucsal.aspmanager.espaco.service;
 
-import br.com.ucsal.aspmanager.escola.model.Disciplina;
 import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.escola.repository.EscolaRepository;
 import br.com.ucsal.aspmanager.espaco.dto.request.CreateEspacoRequest;
@@ -70,9 +69,9 @@ public class EspacoService implements ServiceBase<Long,
         List<Long> idsSoftwares = request.softwares();
         List<Software> softwares = new ArrayList<>();
 
-        if(!idsSoftwares.isEmpty() && request.tipoEspaco().equals(TipoEspaco.LABORATORIO)){
+        if (!idsSoftwares.isEmpty() && request.tipoEspaco().equals(TipoEspaco.LABORATORIO)) {
 
-            for(Long idSoftware : idsSoftwares){
+            for (Long idSoftware : idsSoftwares) {
 
                 Optional<Software> software = this.softwares.findById(idSoftware);
                 software.ifPresent(softwares::add);
@@ -118,12 +117,12 @@ public class EspacoService implements ServiceBase<Long,
     @Transactional
     public void deletar(Long id) {
 
-        try{
+        try {
             espacos.deleteById(id);
 
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Espaço não encontrado!");
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             Espaco espaco = espacos.findById(id).orElseThrow(() ->
                     new EntityNotFoundException("Espaço não encontrado!"));
 
@@ -133,7 +132,7 @@ public class EspacoService implements ServiceBase<Long,
     }
 
     @Transactional
-    public SolicitacaoResponse criarSolicitacao(CreateSolicitacaoRequest request){
+    public SolicitacaoResponse criarSolicitacao(CreateSolicitacaoRequest request) {
 
         Professor professor = professores.findById(request.idProfessor()).orElseThrow(() ->
                 new EntityNotFoundException("Professor não encontrado!"));
@@ -161,11 +160,11 @@ public class EspacoService implements ServiceBase<Long,
                 .map(espacoMapper::toResponse);
     }
 
-    public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros){
+    public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros) {
         return solicitacoes.findAll(filtros).map(solicitacaoMapper::toResponse);
     }
 
-    public SolicitacaoResponse buscarSolicitacao(Long id){
+    public SolicitacaoResponse buscarSolicitacao(Long id) {
         SolicitacaoEspaco solicitacaoEspaco = solicitacoes.findById(id).orElseThrow(()
                 -> new EntityNotFoundException("Solicitação não encontrada!"));
 
@@ -173,7 +172,7 @@ public class EspacoService implements ServiceBase<Long,
     }
 
     @Transactional
-    public SolicitacaoResponse atualizarSolicitacao(Long id, UpdateSolicitacaoRequest request){
+    public SolicitacaoResponse atualizarSolicitacao(Long id, UpdateSolicitacaoRequest request) {
 
         SolicitacaoEspaco solicitacaoEspaco = solicitacoes.findById(id).orElseThrow(()
                 -> new EntityNotFoundException("Solicitação não encontrada!"));
@@ -190,11 +189,11 @@ public class EspacoService implements ServiceBase<Long,
     }
 
     @Transactional
-    public void deletarSolicitacao(Long id){
+    public void deletarSolicitacao(Long id) {
 
-        try{
+        try {
             solicitacoes.deleteById(id);
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Espaço não encontrado!");
         }
 

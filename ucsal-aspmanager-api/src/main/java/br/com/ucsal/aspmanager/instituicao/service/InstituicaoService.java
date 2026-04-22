@@ -8,7 +8,6 @@ import br.com.ucsal.aspmanager.instituicao.model.InstituicaoEnsino;
 import br.com.ucsal.aspmanager.instituicao.model.TelefoneInstituicao;
 import br.com.ucsal.aspmanager.instituicao.repository.InstituicaoEnsinoRepository;
 import br.com.ucsal.aspmanager.instituicao.repository.TelefoneInstituicaoRepository;
-import br.com.ucsal.aspmanager.shared.model.Telefone;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,7 +27,7 @@ public class InstituicaoService implements ServiceBase<Long,
     private final TelefoneInstituicaoRepository telefonesInstituicao;
     private final InstituicaoEnsinoMapper instituicaoEnsinoMapper;
 
-    public InstituicaoService(InstituicaoEnsinoRepository instituicoes, TelefoneInstituicaoRepository telefonesInstituicao, InstituicaoEnsinoMapper instituicaoEnsinoMapper){
+    public InstituicaoService(InstituicaoEnsinoRepository instituicoes, TelefoneInstituicaoRepository telefonesInstituicao, InstituicaoEnsinoMapper instituicaoEnsinoMapper) {
         this.instituicoes = instituicoes;
         this.telefonesInstituicao = telefonesInstituicao;
         this.instituicaoEnsinoMapper = instituicaoEnsinoMapper;
@@ -42,7 +40,7 @@ public class InstituicaoService implements ServiceBase<Long,
         InstituicaoEnsino instituicao = instituicaoEnsinoMapper.toEntity(createInstituicaoEnsinoRequest);
 
         if (createInstituicaoEnsinoRequest.telefones() != null && !createInstituicaoEnsinoRequest.telefones().isEmpty()) {
-            for(String telefone : createInstituicaoEnsinoRequest.telefones()) {
+            for (String telefone : createInstituicaoEnsinoRequest.telefones()) {
                 criarTelefoneParaIES(telefone, instituicao);
             }
         }
@@ -74,8 +72,8 @@ public class InstituicaoService implements ServiceBase<Long,
         instituicao.setNome(updateInstituicaoEnsinoRequest.nome());
         instituicao.setEndereco(updateInstituicaoEnsinoRequest.endereco());
 
-        if(updateInstituicaoEnsinoRequest.telefones() != null
-                && !updateInstituicaoEnsinoRequest.telefones().isEmpty()){
+        if (updateInstituicaoEnsinoRequest.telefones() != null
+                && !updateInstituicaoEnsinoRequest.telefones().isEmpty()) {
 
             List telefonesIES = instituicao.getTelefones();
             telefonesIES.addAll(updateInstituicaoEnsinoRequest.telefones());
@@ -90,18 +88,18 @@ public class InstituicaoService implements ServiceBase<Long,
     @Transactional
     public void deletar(Long id) {
 
-        try{
+        try {
             instituicoes.deleteById(id);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("A Instituição de Ensino está associada a alguma Escola!");
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new EntityNotFoundException("Instituição de Ensino não encontrada!");
         }
     }
 
     @Transactional
     protected void criarTelefoneParaIES(String telefone, InstituicaoEnsino instituicaoEnsino) {
-        String telefoneLimpo = telefone.replaceAll("[()\\s-]","");
+        String telefoneLimpo = telefone.replaceAll("[()\\s-]", "");
         if (telefoneLimpo.matches("\\d{10,11}")) {
             TelefoneInstituicao telefoneInstituicao = new TelefoneInstituicao();
             telefoneInstituicao.setNumero(telefoneLimpo);

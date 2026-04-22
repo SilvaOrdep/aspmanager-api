@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.net.URI;
 
 @RestController
@@ -37,7 +38,7 @@ public class EscolaController extends AbstractCrudController<Long,
     }
 
     @PostMapping("/disciplina")
-    public ResponseEntity<DisciplinaResponse> criarDisciplina(@Valid @RequestBody CreateDisciplinaRequest createDisciplina, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<DisciplinaResponse> criarDisciplina(@Valid @RequestBody CreateDisciplinaRequest createDisciplina, UriComponentsBuilder uriBuilder) {
         DisciplinaResponse disciplinaResponse = escolaService.criarDisciplina(createDisciplina);
         URI uri = disciplinaLocation(disciplinaResponse, uriBuilder);
 
@@ -45,22 +46,22 @@ public class EscolaController extends AbstractCrudController<Long,
     }
 
     @GetMapping("/disciplina")
-    public ResponseEntity<Page<DisciplinaResponse>> buscarDisciplina(Pageable filtros){
+    public ResponseEntity<Page<DisciplinaResponse>> buscarDisciplina(Pageable filtros) {
         return ResponseEntity.ok(escolaService.buscarDisciplina(filtros));
     }
 
     @GetMapping("/disciplina/{id}")
-    public ResponseEntity<DisciplinaResponse> buscarDisciplina(@PathVariable Long id){
+    public ResponseEntity<DisciplinaResponse> buscarDisciplina(@PathVariable Long id) {
         return ResponseEntity.ok(escolaService.buscarDisciplina(id));
     }
 
     @PutMapping("disciplina/{id}")
-    public ResponseEntity<DisciplinaResponse> atualizarDisciplina(@PathVariable Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
-        return ResponseEntity.ok(escolaService.atualizarDisciplina(id, updateDisciplinaRequest)) ;
+    public ResponseEntity<DisciplinaResponse> atualizarDisciplina(@PathVariable Long id, UpdateDisciplinaRequest updateDisciplinaRequest) {
+        return ResponseEntity.ok(escolaService.atualizarDisciplina(id, updateDisciplinaRequest));
     }
 
     @DeleteMapping("disciplina/{id}")
-    public ResponseEntity<Void> deletarDisciplina(@PathVariable Long id){
+    public ResponseEntity<Void> deletarDisciplina(@PathVariable Long id) {
         escolaService.deletarDisciplina(id);
         return ResponseEntity.noContent().build();
     }
