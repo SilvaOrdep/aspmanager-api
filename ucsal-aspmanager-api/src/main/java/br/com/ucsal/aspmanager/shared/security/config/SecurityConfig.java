@@ -54,6 +54,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/*").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/usuarios/*/alterar-senha").authenticated()
 
+                        .requestMatchers(HttpMethod.POST, "/api/v1/software/solicitacoes").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/minhas").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/v1/software").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/software/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/software/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/**").authenticated()
+
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
