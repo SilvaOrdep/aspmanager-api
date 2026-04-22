@@ -22,13 +22,16 @@ public class Espaco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String sigla;
+    @Column(nullable = false)
     private String nome;
     private String descricao;
-    @Column(name = "capacidade_maxima")
+    @Column(name = "capacidade_maxima", nullable = false)
     private Integer capacidadeMaxima;
+    @Column(nullable = false)
     private String localizacao;
-    @Column(name = "status_registro")
+    @Column(name = "status_registro", nullable = false)
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private StatusRegistro statusRegistro = StatusRegistro.ATIVO;

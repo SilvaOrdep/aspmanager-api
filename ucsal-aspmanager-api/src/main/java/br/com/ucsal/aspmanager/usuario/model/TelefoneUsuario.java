@@ -15,7 +15,7 @@ import lombok.*;
 @Builder
 public class TelefoneUsuario extends Telefone {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
 }
