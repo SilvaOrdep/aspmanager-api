@@ -8,6 +8,7 @@ import java.time.LocalTime;
 
 public record SolicitacaoResponse(
         Long idSolicitacao,
+        String descricao,
         LocalDate dataUso,
         LocalTime horaInicio,
         LocalTime horaFim,
