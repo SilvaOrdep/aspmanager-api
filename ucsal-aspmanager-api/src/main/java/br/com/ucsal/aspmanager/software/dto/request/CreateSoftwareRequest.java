@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record CreateSoftwareRequest(
         @NotBlank(message = "Nome do Software é obrigatório!")
@@ -23,8 +24,6 @@ public record CreateSoftwareRequest(
         String tipoLicenca,
         @NotBlank(message = "Objetivo de uso do software é obrigatório!")
         String objetivoUso,
-        @NotNull(message = "Data de cadastro não pode ser nula")
-        LocalDate dataCadastro
-
+        List<Long> idDisciplinas
 ) {
 }

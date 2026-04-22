@@ -19,9 +19,7 @@ public record UpdateSoftwareRequest(
         @Size(min = 3, max = 255, message = "Tipo de licença do software deve ter entre 3 e 255 caracteres")
         String tipoLicenca,
         @NotBlank(message = "Objetivo de uso do software é obrigatório!")
-        String objetivoUso,
-        @NotNull(message = "Data de cadastro não pode ser nula")
-        LocalDate dataCadastro
+        String objetivoUso
 
 ) {
 }
