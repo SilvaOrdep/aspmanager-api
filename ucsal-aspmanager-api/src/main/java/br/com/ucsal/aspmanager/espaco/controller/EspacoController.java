@@ -64,11 +64,6 @@ public class EspacoController extends AbstractCrudController<Long,
         return ResponseEntity.ok(espacoService.atualizarSolicitacao(id, request));
     }
 
-    @PatchMapping("/solicitacao/{id}")
-    public ResponseEntity<SolicitacaoResponse> mudarStatusSolicitacao(@PathVariable Long id, StatusSolicitacao statusSolicitacao){
-        return ResponseEntity.ok(espacoService.mudarStatusSolicitacao(id, statusSolicitacao));
-    }
-
     @DeleteMapping("/solicitacao/{id}")
     public ResponseEntity<Void> deletarSolicitacao(@PathVariable Long id){
         espacoService.deletarSolicitacao(id);
