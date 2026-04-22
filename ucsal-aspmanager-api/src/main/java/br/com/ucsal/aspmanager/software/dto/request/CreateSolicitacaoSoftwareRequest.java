@@ -10,14 +10,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record CreateSolicitacaoSoftwareRequest(
-        @NotNull(message = "Data da Solicitação não pode ser nula!")
-        LocalDate dataSolicitacao,
-        @NotNull(message = "Tipo da Solicitação não pode ser nulo!")
-        TipoSolicitacaoSoftware tipoSolicitacaoSoftware,
-        @NotNull(message = "Status da Solicitação não pode ser nulo!")
-        StatusSolicitacao statusSolicitacao,
-        @NotNull(message = "Id do Software não pode ser nulo!")
-        Long idSoftware,
+        @NotNull(message = "Software não pode ser nulo!")
+        CreateSoftwareRequest software,
         @NotNull(message = "Id do Professor não pode ser nulo!")
         Long idProfessor
 ) {
