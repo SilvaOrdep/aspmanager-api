@@ -22,12 +22,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class EscolaService implements ServiceBase<Long,
         CreateEscolaRequest, UpdateEscolaRequest, EscolaResponse> {
 
@@ -45,6 +47,7 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public EscolaResponse criar(CreateEscolaRequest createEscolaRequest) {
 
         InstituicaoEnsino instituicao = instituicoes.findById(createEscolaRequest.idInstituicao()).
@@ -102,6 +105,7 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public EscolaResponse atualizar(Long id, UpdateEscolaRequest updateEscolaRequest) {
 
         Escola escola = escolas.findById(id)
@@ -123,6 +127,7 @@ public class EscolaService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public void deletar(Long id) {
 
         try{
@@ -137,6 +142,7 @@ public class EscolaService implements ServiceBase<Long,
         }
     }
 
+    @Transactional
     public DisciplinaResponse criarDisciplina(CreateDisciplinaRequest createDisciplinaRequest){
 
         Escola escola = escolas.findById(createDisciplinaRequest.idEscola()).
@@ -168,6 +174,7 @@ public class EscolaService implements ServiceBase<Long,
                 disciplina.getDescricao(), disciplina.getEscola().getId());
     }
 
+    @Transactional
     public DisciplinaResponse atualizarDisciplina(Long id, UpdateDisciplinaRequest updateDisciplinaRequest){
 
         Disciplina disciplina = disciplinas.findById(id).
@@ -184,6 +191,7 @@ public class EscolaService implements ServiceBase<Long,
                 disciplina.getDescricao(), disciplina.getEscola().getId());
     }
 
+    @Transactional
     public void deletarDisciplina (Long id){
         try{
             disciplinas.deleteById(id);
