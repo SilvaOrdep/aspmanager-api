@@ -70,7 +70,7 @@ public class EspacoController extends AbstractCrudController<Long,
     }
 
     @PutMapping("/solicitacao/{id}")
-    public ResponseEntity<SolicitacaoResponse> atualizarSolicitacao(@PathVariable Long id, UpdateSolicitacaoRequest request) {
+    public ResponseEntity<SolicitacaoResponse> atualizarSolicitacao(@PathVariable Long id, @RequestBody @Valid UpdateSolicitacaoRequest request) {
         return ResponseEntity.ok(espacoService.atualizarSolicitacao(id, request));
     }
 
