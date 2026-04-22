@@ -13,8 +13,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class SoftwareService implements ServiceBase<Long,
         CreateSoftwareRequest, UpdateSoftwareRequest, SoftwareResponse> {
 
@@ -25,6 +27,7 @@ public class SoftwareService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public SoftwareResponse criar(CreateSoftwareRequest createSoftwareRequest) {
 
         Software software = Software.builder().
@@ -65,6 +68,7 @@ public class SoftwareService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public SoftwareResponse atualizar(Long id, UpdateSoftwareRequest updateSoftwareRequest) {
         Software software = softwares.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Software não encontrado!"));
@@ -83,6 +87,7 @@ public class SoftwareService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public void deletar(Long id) {
 
         try{

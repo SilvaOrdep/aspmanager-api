@@ -14,11 +14,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class InstituicaoService implements ServiceBase<Long,
         CreateInstituicaoEnsinoRequest, UpdateInstituicaoEnsinoRequest, InstituicaoEnsinoResponse> {
 
@@ -31,6 +33,7 @@ public class InstituicaoService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public InstituicaoEnsinoResponse criar(CreateInstituicaoEnsinoRequest createInstituicaoEnsinoRequest) {
 
         InstituicaoEnsino instituicao = InstituicaoEnsino.builder()
@@ -69,6 +72,7 @@ public class InstituicaoService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public InstituicaoEnsinoResponse atualizar(Long id, UpdateInstituicaoEnsinoRequest updateInstituicaoEnsinoRequest) {
 
         InstituicaoEnsino instituicao = instituicoes.findById(id)
@@ -91,6 +95,7 @@ public class InstituicaoService implements ServiceBase<Long,
     }
 
     @Override
+    @Transactional
     public void deletar(Long id) {
 
         try{
