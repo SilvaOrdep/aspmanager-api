@@ -21,6 +21,7 @@ public class SolicitacaoEspaco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String descricao;
     @Column(name = "data_uso")
     private LocalDate dataUso;
     @Column(name = "hora_inicio")
