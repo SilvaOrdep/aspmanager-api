@@ -23,7 +23,6 @@ import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
 import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.usuario.repository.ProfessorRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -98,19 +97,18 @@ public class SoftwareService implements ServiceBase<Long,
     @Override
     @Transactional
     public void deletar(Long id) {
+        Software software = softwares.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Software não encontrado!"));
 
-        try {
-            softwares.deleteById(id);
+        boolean possuiHistorico = softwares.existsVinculoEmEspacos(id)
+                || solicitacoesSoftware.existsBySoftwareCriado_Id(id);
 
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Software não encontrado!");
-        } catch (DataIntegrityViolationException e) {
-            Software software = softwares.findById(id).orElseThrow(() ->
-                    new EntityNotFoundException("Software não encontrado!"));
-
+        if (possuiHistorico) {
             software.setStatusRegistro(StatusRegistro.INATIVO);
+            return;
         }
 
+        softwares.delete(software);
     }
 
     @Transactional
@@ -183,13 +181,17 @@ public class SoftwareService implements ServiceBase<Long,
     }
 
     private Software criarSoftwareAPartirDaSolicitacao(SolicitacaoSoftware solicitacao) {
+        List<Disciplina> disciplinasDaSolicitacao = solicitacao.getDisciplinasSolicitadas() == null
+            ? Collections.emptyList()
+            : new ArrayList<>(solicitacao.getDisciplinasSolicitadas());
+
         Software software = Software.builder()
                 .nome(solicitacao.getNome())
                 .versao(solicitacao.getVersao())
                 .urlDownload(solicitacao.getUrlDownload())
                 .tipoLicenca(solicitacao.getTipoLicenca())
                 .objetivoUso(solicitacao.getObjetivoUso())
-                .disciplinas(solicitacao.getDisciplinasSolicitadas())
+            .disciplinas(disciplinasDaSolicitacao)
                 .build();
 
         software.setDataCadastro(LocalDate.now());
