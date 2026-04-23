@@ -111,13 +111,7 @@ class ApiIntegrationSecurityMockMvcTest {
                         .with(user("professor@ucsal.com.br").roles("PROFESSOR"))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new java.util.LinkedHashMap<String, Object>() {{
-                            put("dataUso", LocalDate.now().plusDays(1).toString());
-                            put("horaInicio", LocalTime.of(8, 0).toString());
-                            put("horaFim", LocalTime.of(10, 0).toString());
-                            put("idEspaco", 1L);
-                            put("idProfessor", 2L);
-                        }})))
+                        .content("{}"))
                 .andExpect(status().isBadRequest());
     }
 
