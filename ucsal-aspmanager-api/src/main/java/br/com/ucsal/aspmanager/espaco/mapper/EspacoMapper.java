@@ -27,6 +27,7 @@ public interface EspacoMapper {
     void updateEntity(UpdateEspacoRequest request, @MappingTarget Espaco espaco);
 
     @Mapping(target = "softwares", source = "softwares", qualifiedByName = "softwaresToIds")
+    @Mapping(target = "idEscola", source = "escola", qualifiedByName = "escolaToId")
     EspacoResponse toResponse(Espaco espaco);
 
     @Named("escolaFromId")
@@ -60,5 +61,10 @@ public interface EspacoMapper {
         }
 
         return softwares.stream().map(Software::getId).toList();
+    }
+
+    @Named("escolaToId")
+    default Long escolaToId(Escola escola) {
+        return escola == null ? null : escola.getId();
     }
 }
