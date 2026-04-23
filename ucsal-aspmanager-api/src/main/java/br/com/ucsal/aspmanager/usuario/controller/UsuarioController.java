@@ -33,7 +33,8 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/v1/usuarios")
 @Tag(name = "Usuários", description = "Gestão de usuários do sistema e cadastro de professores")
-public class UsuarioController extends AbstractCrudController<Long, CreateUsuarioRequest, UpdateUsuarioRequest, UsuarioResponse> {
+public class UsuarioController
+        extends AbstractCrudController<Long, CreateUsuarioRequest, UpdateUsuarioRequest, UsuarioResponse> {
 
     private final UsuarioService usuarioService;
 
@@ -43,40 +44,30 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
     }
 
     @PatchMapping("/{id}")
-        @Operation(
-            summary = "Alternar status de usuário",
-            description = "Altera o status entre ATIVO e INATIVO para o usuário informado."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "toggleUsuarioStatusById", summary = "Alternar status de usuário", description = "Altera o status entre ATIVO e INATIVO para o usuário informado.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Status alterado com sucesso"),
-            @ApiResponse(responseCode = "401", description = "Não autenticado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Acesso negado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
-        public ResponseEntity<UsuarioResponse> alterarStatus(@Parameter(description = "ID do usuário", example = "1") @PathVariable Long id) {
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<UsuarioResponse> alterarStatus(
+            @Parameter(description = "ID do usuário", example = "1") @PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.alterarStatusRegistro(id));
     }
 
     @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
-        @Operation(
-            summary = "Buscar usuário por ID",
-            description = "ADMIN pode consultar qualquer usuário. PROFESSOR só pode consultar o próprio cadastro."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "getUsuarioById", summary = "Buscar usuário por ID", description = "ADMIN pode consultar qualquer usuário. PROFESSOR só pode consultar o próprio cadastro.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
-            @ApiResponse(responseCode = "401", description = "Não autenticado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Sem permissão para acessar este usuário",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
-        public ResponseEntity<UsuarioResponse> buscar(@Parameter(description = "ID do usuário", example = "1") @PathVariable Long id) {
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Sem permissão para acessar este usuário", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<UsuarioResponse> buscar(
+            @Parameter(description = "ID do usuário", example = "1") @PathVariable Long id) {
         UsuarioResponse usuarioAutenticado = usuarioAutenticado();
         validarAcessoAoUsuario(id, usuarioAutenticado);
         return ResponseEntity.ok(usuarioService.buscar(id));
@@ -85,25 +76,18 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
     @Override
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
-        @Operation(
-            summary = "Atualizar usuário",
-            description = "ADMIN pode atualizar qualquer usuário. PROFESSOR só pode atualizar o próprio cadastro."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "updateUsuarioById", summary = "Atualizar usuário", description = "ADMIN pode atualizar qualquer usuário. PROFESSOR só pode atualizar o próprio cadastro.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Não autenticado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Sem permissão para atualizar este usuário",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "409", description = "Conflito de regra de negócio",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
-        public ResponseEntity<UsuarioResponse> atualizar(@Parameter(description = "ID do usuário", example = "1") @PathVariable Long id,
-                                 @RequestBody @Valid UpdateUsuarioRequest request) {
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Sem permissão para atualizar este usuário", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Conflito de regra de negócio", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<UsuarioResponse> atualizar(
+            @Parameter(description = "ID do usuário", example = "1") @PathVariable Long id,
+            @RequestBody @Valid UpdateUsuarioRequest request) {
         UsuarioResponse usuarioAutenticado = usuarioAutenticado();
         validarAcessoAoUsuario(id, usuarioAutenticado);
         return ResponseEntity.ok(usuarioService.atualizar(id, request));
@@ -111,23 +95,17 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
 
     @PatchMapping("/{id}/alterar-senha")
     @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
-        @Operation(
-            summary = "Alterar senha do usuário",
-            description = "Permite alterar senha informando senha atual e nova senha."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "changeUsuarioSenhaById", summary = "Alterar senha do usuário", description = "Permite alterar senha informando senha atual e nova senha.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Senha alterada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos ou senha atual incorreta",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Não autenticado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Sem permissão para alterar senha deste usuário",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
-        public ResponseEntity<Void> alterarSenha(@Parameter(description = "ID do usuário", example = "1") @PathVariable Long id,
-                             @RequestBody @Valid AlterarSenhaRequest request) {
+            @ApiResponse(responseCode = "400", description = "Dados inválidos ou senha atual incorreta", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Sem permissão para alterar senha deste usuário", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<Void> alterarSenha(
+            @Parameter(description = "ID do usuário", example = "1") @PathVariable Long id,
+            @RequestBody @Valid AlterarSenhaRequest request) {
         UsuarioResponse usuarioAutenticado = usuarioAutenticado();
         validarAcessoAoUsuario(id, usuarioAutenticado);
         usuarioService.alterarSenha(request, id);
@@ -135,59 +113,42 @@ public class UsuarioController extends AbstractCrudController<Long, CreateUsuari
     }
 
     @GetMapping("/professores")
-        @Operation(
-            summary = "Listar professores",
-            description = "Retorna lista paginada de professores ativos."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "listProfessores", summary = "Listar professores", description = "Retorna lista paginada de professores ativos.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Consulta realizada com sucesso"),
-            @ApiResponse(responseCode = "401", description = "Não autenticado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Acesso negado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
-        public ResponseEntity<Page<UsuarioResponse>> buscarTodosOsProfessores(@ParameterObject Pageable filtros) {
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<Page<UsuarioResponse>> buscarTodosOsProfessores(@ParameterObject Pageable filtros) {
         return ResponseEntity.ok(usuarioService.buscarTodosProfessores(filtros));
     }
 
     @PutMapping("/professores/{idProfessor}")
-        @Operation(
-            summary = "Atualizar professor",
-            description = "Atualiza dados acadêmicos do professor, como matrícula e escola vinculada."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "updateProfessorById", summary = "Atualizar professor", description = "Atualiza dados acadêmicos do professor, como matrícula e escola vinculada.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Professor atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Não autenticado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Acesso negado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Professor não encontrado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "409", description = "Conflito de regra de negócio",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
-        public ResponseEntity<UsuarioResponse> atualizarProfessor(@Parameter(description = "ID do professor", example = "1") @PathVariable Long idProfessor,
-                                      @RequestBody @Valid UpdateProfessorRequest request) {
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Professor não encontrado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Conflito de regra de negócio", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<UsuarioResponse> atualizarProfessor(
+            @Parameter(description = "ID do professor", example = "1") @PathVariable Long idProfessor,
+            @RequestBody @Valid UpdateProfessorRequest request) {
         return ResponseEntity.ok(usuarioService.atualizarProfessor(idProfessor, request));
     }
 
     @DeleteMapping("/professores/{idProfessor}")
-        @Operation(
-            summary = "Excluir professor",
-            description = "Exclui o vínculo de professor por identificador."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "deleteProfessorById", summary = "Excluir professor", description = "Exclui o vínculo de professor por identificador.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Professor excluído com sucesso"),
-            @ApiResponse(responseCode = "401", description = "Não autenticado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "403", description = "Acesso negado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Professor não encontrado",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
-        public ResponseEntity<Void> deletarProfessor(@Parameter(description = "ID do professor", example = "1") @PathVariable Long idProfessor) {
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Professor não encontrado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<Void> deletarProfessor(
+            @Parameter(description = "ID do professor", example = "1") @PathVariable Long idProfessor) {
         usuarioService.deletarProfessor(idProfessor);
         return ResponseEntity.noContent().build();
     }

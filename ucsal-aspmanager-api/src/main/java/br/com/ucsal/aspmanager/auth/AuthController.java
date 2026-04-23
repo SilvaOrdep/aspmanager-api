@@ -33,22 +33,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-        @Operation(
-            summary = "Autenticar usuário",
-            description = "Valida credenciais de acesso e retorna um token JWT para uso nas demais rotas protegidas."
-        )
-        @ApiResponses(value = {
+    @Operation(operationId = "loginUsuario", summary = "Autenticar usuário", description = "Valida credenciais de acesso e retorna um token JWT para uso nas demais rotas protegidas.")
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário autenticado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados de login inválidos",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Credenciais inválidas",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor",
-                content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
-        })
+            @ApiResponse(responseCode = "400", description = "Dados de login inválidos", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
     @SecurityRequirements
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(request.email(), request.senha());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                request.email(), request.senha());
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         Usuario principal = (Usuario) authenticate.getPrincipal();
