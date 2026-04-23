@@ -2,10 +2,13 @@ package br.com.ucsal.aspmanager.shared.exception;
 
 import br.com.ucsal.aspmanager.shared.model.dto.ErroApiResponse;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -68,6 +71,68 @@ public class GlobalExceptionHandler {
                 .erros(listaErro)
                 .build();
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErroApiResponse> messageNotReadableException(HttpMessageNotReadableException ex) {
+        String mensagem = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        ErroApiResponse erro = ErroApiResponse
+                .builder()
+                .timestamp(LocalDateTime.now())
+                .codigo(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST.name())
+            .erros(List.of(mensagem))
+                .build();
+        return new ResponseEntity<>(erro, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErroApiResponse> illegalArgumentException(IllegalArgumentException ex) {
+        ErroApiResponse erro = ErroApiResponse
+                .builder()
+                .timestamp(LocalDateTime.now())
+                .codigo(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.BAD_REQUEST.name())
+                .erros(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(erro, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErroApiResponse> illegalStateException(IllegalStateException ex) {
+        ErroApiResponse erro = ErroApiResponse
+                .builder()
+                .timestamp(LocalDateTime.now())
+                .codigo(HttpStatus.CONFLICT.value())
+                .status(HttpStatus.CONFLICT.name())
+                .erros(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(erro, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ErroApiResponse> entityNotFoundException(EntityNotFoundException ex) {
+        ErroApiResponse erro = ErroApiResponse
+                .builder()
+                .timestamp(LocalDateTime.now())
+                .codigo(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.NOT_FOUND.name())
+                .erros(List.of(ex.getMessage()))
+                .build();
+        return new ResponseEntity<>(erro, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroApiResponse> dataIntegrityViolationException(DataIntegrityViolationException ex) {
+        String mensagem = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        ErroApiResponse erro = ErroApiResponse
+                .builder()
+                .timestamp(LocalDateTime.now())
+                .codigo(HttpStatus.CONFLICT.value())
+                .status(HttpStatus.CONFLICT.name())
+            .erros(List.of(mensagem))
+                .build();
+        return new ResponseEntity<>(erro, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)
