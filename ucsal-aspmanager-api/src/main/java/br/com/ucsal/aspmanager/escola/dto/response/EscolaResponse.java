@@ -1,15 +1,28 @@
 package br.com.ucsal.aspmanager.escola.dto.response;
 
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
+@Schema(description = "Resposta de escola")
 public record EscolaResponse(
+    @Schema(description = "ID da escola", example = "2")
     Long id,
+
+    @Schema(description = "Nome da escola", example = "Escola de Ciências Sociais e Aplicadas")
     String nome,
+
+    @Schema(description = "Status do registro da escola", example = "ATIVO")
     StatusRegistro statusRegistro,
+
+    @Schema(description = "ID da instituição de ensino vinculada", example = "1")
     Long idInstituicao,
+
+    @Schema(description = "ID do coordenador da escola", example = "12")
     Long idCoordenador,
+
+    @Schema(description = "IDs de disciplinas associadas", example = "[3, 8, 15]")
     List<Long> idsDisciplinas
 ) {
 }
