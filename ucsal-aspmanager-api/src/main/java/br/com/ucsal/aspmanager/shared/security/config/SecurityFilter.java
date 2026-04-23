@@ -2,6 +2,7 @@ package br.com.ucsal.aspmanager.shared.security.config;
 
 import br.com.ucsal.aspmanager.shared.security.jwt.JwtService;
 import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,21 +29,24 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring("Bearer ".length());
-            Optional<UsuarioResponse> usuarioExistente = jwtService.validarToken(token);
-            if (usuarioExistente.isPresent()) {
-                UsuarioResponse usuarioResponse = usuarioExistente.get();
-                String perfil = usuarioResponse.perfil().name();
-                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + perfil));
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        usuarioResponse, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring("Bearer ".length());
+                Optional<UsuarioResponse> usuarioExistente = jwtService.validarToken(token);
+                if (usuarioExistente.isPresent()) {
+                    UsuarioResponse usuarioResponse = usuarioExistente.get();
+                    String perfil = usuarioResponse.perfil().name();
+                    List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + perfil));
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            usuarioResponse, null, authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
             filterChain.doFilter(request, response);
-        } else {
-            filterChain.doFilter(request, response);
+        } catch (JWTVerificationException ex) {
+            SecurityContextHolder.clearContext();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token JWT inválido ou expirado");
         }
     }
 }
