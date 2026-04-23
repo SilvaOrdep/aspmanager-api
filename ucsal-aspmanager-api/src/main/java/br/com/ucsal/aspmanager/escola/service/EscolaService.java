@@ -114,17 +114,16 @@ public class EscolaService implements ServiceBase<Long,
     @Override
     @Transactional
     public void deletar(Long id) {
+        Escola escola = escolas.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
 
-        try {
-            escolas.deleteById(id);
-
-        } catch (DataIntegrityViolationException e) {
-
-            Escola escola = escolas.findById(id).orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+        boolean possuiHistorico = professores.existsByEscola_Id(id) || disciplinas.existsByEscola_Id(id);
+        if (possuiHistorico) {
             escola.setStatusRegistro(StatusRegistro.INATIVO);
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Escola não encontrada!");
+            return;
         }
+
+        escolas.delete(escola);
     }
 
     @Transactional

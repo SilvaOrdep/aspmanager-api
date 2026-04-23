@@ -1,6 +1,7 @@
 package br.com.ucsal.aspmanager.shared.security.config;
 
 import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,6 +40,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configure(http))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                    .authenticationEntryPoint((request, response, authException) ->
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Não autenticado"))
+                    .accessDeniedHandler((request, response, accessDeniedException) ->
+                        response.sendError(HttpServletResponse.SC_FORBIDDEN, "Acesso negado"))
+                )
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
@@ -73,6 +80,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/software/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/software/*").hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/minhas").hasRole("PROFESSOR")
+
                         .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/software/solicitacoes/**").hasRole("ADMIN")
@@ -85,7 +94,6 @@ public class SecurityConfig {
 
                         // PROFESSOR
                         .requestMatchers(HttpMethod.POST, "/api/v1/software/solicitacoes").hasRole("PROFESSOR")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/minhas").hasRole("PROFESSOR")
                         .requestMatchers(HttpMethod.POST, "/api/v1/espaco/solicitacao").hasRole("PROFESSOR")
 
                         // AMBOS

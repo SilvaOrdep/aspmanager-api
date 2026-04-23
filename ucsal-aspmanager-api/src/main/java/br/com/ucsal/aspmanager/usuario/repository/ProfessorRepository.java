@@ -14,6 +14,8 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
     Page<Professor> findByUsuario_StatusRegistro(StatusRegistro statusRegistro, Pageable pageable);
 
+    boolean existsByEscola_Id(Long escolaId);
+
     void deleteByUsuario(Usuario usuario);
 
     Optional<Professor> findByMatricula(String matricula);

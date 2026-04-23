@@ -1,6 +1,5 @@
 package br.com.ucsal.aspmanager.espaco.dto.response;
 
-import br.com.ucsal.aspmanager.escola.model.Escola;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoEspaco;
 
@@ -15,7 +14,7 @@ public record EspacoResponse(
         String localizacao,
         String tipoComputadores,
         TipoEspaco tipoEspaco,
-        Escola escola,
+        Long idEscola,
         List<Long> softwares,
         StatusRegistro statusRegistro
 ) {

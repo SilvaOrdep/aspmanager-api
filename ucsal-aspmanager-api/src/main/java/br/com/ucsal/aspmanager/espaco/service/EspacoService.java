@@ -23,7 +23,6 @@ import br.com.ucsal.aspmanager.software.repository.SoftwareRepository;
 import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.usuario.repository.ProfessorRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -116,19 +115,15 @@ public class EspacoService implements ServiceBase<Long,
     @Override
     @Transactional
     public void deletar(Long id) {
+        Espaco espaco = espacos.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Espaço não encontrado!"));
 
-        try {
-            espacos.deleteById(id);
-
-        } catch (EntityNotFoundException e) {
-            throw new EntityNotFoundException("Espaço não encontrado!");
-        } catch (DataIntegrityViolationException e) {
-            Espaco espaco = espacos.findById(id).orElseThrow(() ->
-                    new EntityNotFoundException("Espaço não encontrado!"));
-
+        if (solicitacoes.existsByEspaco_Id(id)) {
             espaco.setStatusRegistro(StatusRegistro.INATIVO);
+            return;
         }
 
+        espacos.delete(espaco);
     }
 
     @Transactional
