@@ -49,7 +49,7 @@ class ApiIntegrationInstituicaoEscolaUsuarioTest {
         Map<String, Object> payload = Map.of(
                 "nome", "Instituicao Teste " + sufixo,
                 "endereco", "Rua Principal, 100",
-                "telefones", List.of()
+                "telefones", List.of("(71) 3201-7000", "71 99999-8888")
         );
 
         mockMvc.perform(post("/api/v1/instituicao")
@@ -58,7 +58,9 @@ class ApiIntegrationInstituicaoEscolaUsuarioTest {
                         .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.nome").value("Instituicao Teste " + sufixo));
+                .andExpect(jsonPath("$.nome").value("Instituicao Teste " + sufixo))
+                .andExpect(jsonPath("$.telefones[0]").value("7132017000"))
+                .andExpect(jsonPath("$.telefones[1]").value("71999998888"));
     }
 
     @Test
