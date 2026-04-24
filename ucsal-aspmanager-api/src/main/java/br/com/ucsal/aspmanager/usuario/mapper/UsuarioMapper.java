@@ -44,6 +44,7 @@ public interface UsuarioMapper {
                 usuario.getPerfil(),
                 usuario.getStatusRegistro(),
                 professor == null ? null : professor.getMatricula(),
+                professor == null ? null : professor.getEscola().getId(),
                 toTelefoneStrings(usuario.getTelefones())
         );
     }

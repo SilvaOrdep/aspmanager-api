@@ -56,8 +56,10 @@ public class EscolaService implements ServiceBase<Long,
         InstituicaoEnsino instituicao = instituicoes.findById(createEscolaRequest.idInstituicao()).
                 orElseThrow(() -> new EntityNotFoundException(("Instituição de ensino não encontrada!")));
 
-        Professor professor = professores.findById(createEscolaRequest.idCoordenador()).
-                orElseThrow(() -> new EntityNotFoundException(("Professor não encontrado!")));
+        if (createEscolaRequest.idCoordenador() != null) {
+            Professor professor = professores.findById(createEscolaRequest.idCoordenador()).
+                    orElseThrow(() -> new EntityNotFoundException(("Professor não encontrado!")));
+        }
 
         List<Long> idsDisciplinas = createEscolaRequest.idsDisciplinas();
         List<Disciplina> disciplinas = new ArrayList<>();
@@ -103,8 +105,11 @@ public class EscolaService implements ServiceBase<Long,
         InstituicaoEnsino instituicao = instituicoes.findById(updateEscolaRequest.idInstituicao()).
                 orElseThrow(() -> new EntityNotFoundException(("Instituição de ensino não encontrada!")));
 
-        Professor professor = professores.findById(updateEscolaRequest.idCoordenador()).
-                orElseThrow(() -> new EntityNotFoundException(("Professor não encontrado!")));
+        if (updateEscolaRequest.idCoordenador() != null ) {
+            Professor professor = professores.findById(updateEscolaRequest.idCoordenador()).
+                    orElseThrow(() -> new EntityNotFoundException(("Professor não encontrado!")));
+
+        }
 
         escolaMapper.updateEntity(updateEscolaRequest, escola);
 

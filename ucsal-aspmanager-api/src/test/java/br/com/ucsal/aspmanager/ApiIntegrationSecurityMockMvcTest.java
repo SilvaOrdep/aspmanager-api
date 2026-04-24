@@ -134,6 +134,6 @@ class ApiIntegrationSecurityMockMvcTest {
 
     @SuppressWarnings("unused")
     private UsuarioResponse usuario(Long id, Perfil perfil) {
-        return new UsuarioResponse(id, "Usuário", "usuario@ucsal.com.br", perfil, StatusRegistro.ATIVO, null, null);
+        return new UsuarioResponse(id, "Usuário", "usuario@ucsal.com.br", perfil, StatusRegistro.ATIVO, null, null, null);
     }
 }

@@ -226,6 +226,7 @@ class ApiIntegrationSoftwareSolicitacaoTest {
                 Perfil.PROFESSOR,
                 StatusRegistro.ATIVO,
                 "200033111",
+                3L,
                 List.of()
         );
 
