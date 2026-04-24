@@ -14,6 +14,6 @@ public record DisciplinaResponse(
         String descricao,
 
         @Schema(description = "ID da escola vinculada", example = "2")
-        Long idInstituicao
+        Long idEscola
 ) {
 }
