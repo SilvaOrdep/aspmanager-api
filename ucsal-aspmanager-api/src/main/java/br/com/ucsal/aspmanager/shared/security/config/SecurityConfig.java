@@ -81,6 +81,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/software/*").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/minhas").hasRole("PROFESSOR")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/espaco/solicitacao/minhas").hasRole("PROFESSOR")
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/software/solicitacoes/*").hasRole("ADMIN")
@@ -105,7 +106,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/software").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers(HttpMethod.GET, "/api/v1/software/*").hasAnyRole("ADMIN", "PROFESSOR")
 
-                        // Dados do próprio usuário
                         .requestMatchers(HttpMethod.GET, "/api/v1/usuarios/*").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/usuarios/*").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/usuarios/*/alterar-senha").authenticated()

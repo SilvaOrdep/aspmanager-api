@@ -2,14 +2,16 @@ package br.com.ucsal.aspmanager.espaco.dto.response;
 
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Schema(description = "Resposta de solicitação de reserva de espaço")
+@Builder
 public record SolicitacaoResponse(
         @Schema(description = "ID da solicitação", example = "10")
-        Long idSolicitacao,
+        Long id,
 
         @Schema(description = "Descrição da solicitação", example = "Aula prática de redes")
         String descricao,

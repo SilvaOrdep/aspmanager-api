@@ -22,6 +22,7 @@ public interface SolicitacaoMapper {
     @Mapping(target = "professor", source = "idProfessor", qualifiedByName = "professorFromId")
     void updateEntity(UpdateSolicitacaoRequest request, @MappingTarget SolicitacaoEspaco solicitacaoEspaco);
 
+    @Mapping(target = "id", source = "id")
     @Mapping(target = "idEspaco", source = "espaco", qualifiedByName = "espacoToId")
     @Mapping(target = "idProfessor", source = "professor", qualifiedByName = "professorToId")
     SolicitacaoResponse toResponse(SolicitacaoEspaco solicitacaoEspaco);
