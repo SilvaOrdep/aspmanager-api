@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public interface EspacoRepository extends JpaRepository<Espaco, Long> {
 
@@ -36,4 +37,6 @@ public interface EspacoRepository extends JpaRepository<Espaco, Long> {
             @Param("statusSolicitacao") StatusSolicitacao statusSolicitacao,
             Pageable pageable
     );
+
+    List<Espaco> findBySoftwares_Id(Long softwareId);
 }
