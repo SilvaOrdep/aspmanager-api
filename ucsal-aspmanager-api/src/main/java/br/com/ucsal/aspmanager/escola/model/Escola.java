@@ -25,7 +25,8 @@ public class Escola {
     private String nome;
     @Column(name = "status_registro", nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusRegistro statusRegistro;
+    @Builder.Default
+    private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
     @ManyToOne
     @JoinColumn(name = "id_instituicao", nullable = false)
     private InstituicaoEnsino instituicao;

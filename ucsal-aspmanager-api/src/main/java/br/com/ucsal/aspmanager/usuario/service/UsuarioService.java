@@ -51,7 +51,6 @@ public class UsuarioService implements UserDetailsService, ServiceBase<Long, Cre
     public UsuarioResponse criar(CreateUsuarioRequest createUsuarioRequest) {
         Usuario usuario = usuarioMapper.toEntity(createUsuarioRequest);
         usuario.setSenha(codificadorDeSenha.encode(createUsuarioRequest.senha()));
-        usuario.setStatusRegistro(StatusRegistro.ATIVO);
 
         boolean isProfessor = createUsuarioRequest.perfil().equals(Perfil.PROFESSOR);
 

@@ -36,7 +36,8 @@ public class Usuario implements UserDetails {
     private Perfil perfil;
     @Column(name = "status_registro", nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusRegistro statusRegistro;
+    @Builder.Default
+    private StatusRegistro statusRegistro = StatusRegistro.ATIVO;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "usuario", fetch = FetchType.LAZY)
     @Builder.Default
     private List<TelefoneUsuario> telefones = new ArrayList<>();
