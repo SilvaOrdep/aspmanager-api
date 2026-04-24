@@ -22,6 +22,10 @@ import br.com.ucsal.aspmanager.software.repository.SolicitacaoSoftwareRepository
 import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
 import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.usuario.repository.ProfessorRepository;
+import br.com.ucsal.aspmanager.espaco.model.Espaco;
+import br.com.ucsal.aspmanager.espaco.repository.EspacoRepository;
+import br.com.ucsal.aspmanager.software.dto.response.DisciplinaVinculadaResponse;
+import br.com.ucsal.aspmanager.software.dto.response.EspacoVinculadoResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,42 +49,45 @@ public class SoftwareService implements ServiceBase<Long,
     private final DisciplinaRepository disciplinas;
     private final SoftwareMapper softwareMapper;
     private final SolicitacaoSoftwareMapper solicitacaoSoftwareMapper;
+    private final EspacoRepository espacos;
 
     public SoftwareService(SoftwareRepository softwares,
                            SolicitacaoSoftwareRepository solicitacoesSoftware,
                            ProfessorRepository professores,
                            DisciplinaRepository disciplinas,
                            SoftwareMapper softwareMapper,
-                           SolicitacaoSoftwareMapper solicitacaoSoftwareMapper) {
+                           SolicitacaoSoftwareMapper solicitacaoSoftwareMapper,
+                           EspacoRepository espacos) {
         this.softwares = softwares;
         this.solicitacoesSoftware = solicitacoesSoftware;
         this.professores = professores;
         this.disciplinas = disciplinas;
         this.softwareMapper = softwareMapper;
         this.solicitacaoSoftwareMapper = solicitacaoSoftwareMapper;
+        this.espacos = espacos;
     }
 
     @Override
     @Transactional
     public SoftwareResponse criar(CreateSoftwareRequest createSoftwareRequest) {
-
         Software software = softwareMapper.toEntity(createSoftwareRequest);
         software.setDataCadastro(LocalDate.now());
+        software.setDisciplinas(carregarDisciplinas(createSoftwareRequest.idDisciplinas()));
 
-        return softwareMapper.toResponse(softwares.save(software));
+        Software salvo = softwares.save(software);
+        return toResponseComVinculos(salvo);
     }
 
     @Override
     public Page<SoftwareResponse> buscarTodos(Pageable filtros) {
-        return softwares.findAll(filtros).map(softwareMapper::toResponse);
+        return softwares.findAll(filtros).map(this::toResponseComVinculos);
     }
 
     @Override
     public SoftwareResponse buscar(Long id) {
         Software software = softwares.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Software não encontrado!"));
-
-        return softwareMapper.toResponse(software);
+        return toResponseComVinculos(software);
     }
 
     @Override
@@ -90,8 +97,7 @@ public class SoftwareService implements ServiceBase<Long,
                 new EntityNotFoundException("Software não encontrado!"));
 
         softwareMapper.updateEntity(updateSoftwareRequest, software);
-
-        return softwareMapper.toResponse(software);
+        return toResponseComVinculos(software);
     }
 
     @Override
@@ -223,5 +229,38 @@ public class SoftwareService implements ServiceBase<Long,
 
         return professores.findByUsuario_Id(usuario.id()).orElseThrow(() ->
                 new EntityNotFoundException("Professor autenticado não encontrado!"));
+    }
+
+    private SoftwareResponse toResponseComVinculos(Software software) {
+        List<DisciplinaVinculadaResponse> disciplinasVinculadas = software.getDisciplinas() == null
+            ? Collections.emptyList()
+            : software.getDisciplinas().stream()
+                .map(d -> new DisciplinaVinculadaResponse(
+                        d.getId(),
+                        d.getNome(),
+                        d.getEscola() == null ? null : d.getEscola().getId()
+                ))
+                .toList();
+
+        List<EspacoVinculadoResponse> espacosVinculados = espacos.findBySoftwares_Id(software.getId()).stream()
+            .map(e -> new EspacoVinculadoResponse(
+                    e.getId(),
+                    e.getSigla(),
+                    e.getNome()
+            ))
+            .toList();
+
+        return new SoftwareResponse(
+                software.getId(),
+                software.getNome(),
+                software.getVersao(),
+                software.getUrlDownload(),
+                software.getTipoLicenca(),
+                software.getObjetivoUso(),
+                software.getDataCadastro(),
+                software.getStatusRegistro(),
+                disciplinasVinculadas,
+                espacosVinculados
+        );
     }
 }

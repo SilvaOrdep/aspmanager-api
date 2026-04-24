@@ -4,6 +4,7 @@ import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Schema(description = "Resposta de software")
 public record SoftwareResponse(
@@ -29,6 +30,12 @@ public record SoftwareResponse(
         LocalDate dataCadastro,
 
         @Schema(description = "Status do registro", example = "ATIVO")
-        StatusRegistro statusRegistro
+        StatusRegistro statusRegistro,
+
+        @Schema(description = "Disciplinas vinculadas ao software")
+        List<DisciplinaVinculadaResponse> disciplinas,
+
+        @Schema(description = "Espaços que possuem o software vinculado")
+        List<EspacoVinculadoResponse> espacos
 ) {
 }

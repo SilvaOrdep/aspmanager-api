@@ -15,11 +15,13 @@ public interface SoftwareMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dataCadastro", ignore = true)
     @Mapping(target = "statusRegistro", ignore = true)
+    @Mapping(target = "disciplinas", ignore = true)
     Software toEntity(CreateSoftwareRequest request);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dataCadastro", ignore = true)
     @Mapping(target = "statusRegistro", ignore = true)
+    @Mapping(target = "disciplinas", ignore = true)
     void updateEntity(UpdateSoftwareRequest request, @MappingTarget Software software);
 
     SoftwareResponse toResponse(Software software);
