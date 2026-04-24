@@ -14,23 +14,27 @@ import br.com.ucsal.aspmanager.espaco.model.Espaco;
 import br.com.ucsal.aspmanager.espaco.model.SolicitacaoEspaco;
 import br.com.ucsal.aspmanager.espaco.repository.EspacoRepository;
 import br.com.ucsal.aspmanager.espaco.repository.SolicitacaoEspacoRepository;
+import br.com.ucsal.aspmanager.shared.model.enums.Perfil;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusRegistro;
 import br.com.ucsal.aspmanager.shared.model.enums.StatusSolicitacao;
 import br.com.ucsal.aspmanager.shared.model.enums.TipoEspaco;
 import br.com.ucsal.aspmanager.shared.service.ServiceBase;
 import br.com.ucsal.aspmanager.software.model.Software;
 import br.com.ucsal.aspmanager.software.repository.SoftwareRepository;
+import br.com.ucsal.aspmanager.usuario.dto.response.UsuarioResponse;
 import br.com.ucsal.aspmanager.usuario.model.Professor;
 import br.com.ucsal.aspmanager.usuario.repository.ProfessorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +69,7 @@ public class EspacoService implements ServiceBase<Long,
         Escola escola = escolas.findById(request.idEscola())
                 .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
 
-        List<Long> idsSoftwares = request.softwares();
+        List<Long> idsSoftwares = request.softwares() == null ? Collections.emptyList() : request.softwares();
         List<Software> softwares = new ArrayList<>();
 
         if (!idsSoftwares.isEmpty() && request.tipoEspaco().equals(TipoEspaco.LABORATORIO)) {
@@ -136,10 +140,12 @@ public class EspacoService implements ServiceBase<Long,
                 new EntityNotFoundException("Espaço não encontrado!"));
 
         SolicitacaoEspaco solicitacaoEspaco = solicitacaoMapper.toEntity(request);
-
+        solicitacaoEspaco.setProfessor(professor);
+        solicitacaoEspaco.setEspaco(espaco);
         solicitacaoEspaco.setStatusSolicitacao(StatusSolicitacao.PENDENTE);
 
-        return solicitacaoMapper.toResponse(solicitacoes.save(solicitacaoEspaco));
+        SolicitacaoEspaco salva = solicitacoes.saveAndFlush(solicitacaoEspaco);
+        return solicitacaoMapper.toResponse(salva);
     }
 
     public Page<EspacoResponse> buscarDisponiveis(LocalDate dataUso, LocalTime horaInicio, LocalTime horaFim, Pageable filtros) {
@@ -157,6 +163,12 @@ public class EspacoService implements ServiceBase<Long,
 
     public Page<SolicitacaoResponse> buscarSolicitacao(Pageable filtros) {
         return solicitacoes.findAll(filtros).map(solicitacaoMapper::toResponse);
+    }
+
+    public Page<SolicitacaoResponse> buscarMinhasSolicitacoes(Pageable filtros) {
+        Professor professorAutenticado = buscarProfessorAutenticado();
+        return solicitacoes.findByProfessor_Id(professorAutenticado.getId(), filtros)
+                .map(solicitacaoMapper::toResponse);
     }
 
     public SolicitacaoResponse buscarSolicitacao(Long id) {
@@ -192,6 +204,21 @@ public class EspacoService implements ServiceBase<Long,
             throw new EntityNotFoundException("Espaço não encontrado!");
         }
 
+    }
+
+    private Professor buscarProfessorAutenticado() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!(principal instanceof UsuarioResponse usuario)) {
+            throw new IllegalStateException("Usuário autenticado inválido.");
+        }
+
+        if (usuario.perfil() != Perfil.PROFESSOR) {
+            throw new IllegalStateException("Somente professores possuem solicitações próprias de espaço.");
+        }
+
+        return professores.findByUsuario_Id(usuario.id()).orElseThrow(() ->
+                new EntityNotFoundException("Professor autenticado não encontrado!"));
     }
 
 }

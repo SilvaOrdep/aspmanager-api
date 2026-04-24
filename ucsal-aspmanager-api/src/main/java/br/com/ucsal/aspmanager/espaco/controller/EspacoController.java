@@ -67,7 +67,7 @@ public class EspacoController
     }
 
     protected URI espacoLocation(SolicitacaoResponse solicitacao, UriComponentsBuilder uriBuilder) {
-        return uriBuilder.path("/api/v1/espaco/solicitacao{id}").buildAndExpand(solicitacao.idSolicitacao()).toUri();
+        return uriBuilder.path("/api/v1/espaco/solicitacao{id}").buildAndExpand(solicitacao.id()).toUri();
     }
 
     @GetMapping("/solicitacao")
@@ -79,6 +79,19 @@ public class EspacoController
     })
     public ResponseEntity<Page<SolicitacaoResponse>> buscarSolicitacao(@ParameterObject Pageable filtros) {
         return ResponseEntity.ok(espacoService.buscarSolicitacao(filtros));
+    }
+
+    @GetMapping("/solicitacao/minhas")
+    @Operation(operationId = "listMinhasEspacoSolicitacoes", summary = "Listar minhas solicitações de espaço", description = "Retorna lista paginada das solicitações do professor autenticado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Consulta realizada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Professor autenticado não encontrado", content = @Content(schema = @Schema(implementation = ErroApiResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Usuário autenticado inválido para esta operação", content = @Content(schema = @Schema(implementation = ErroApiResponse.class)))
+    })
+    public ResponseEntity<Page<SolicitacaoResponse>> buscarMinhasSolicitacoes(@ParameterObject Pageable filtros) {
+        return ResponseEntity.ok(espacoService.buscarMinhasSolicitacoes(filtros));
     }
 
     @GetMapping("/disponiveis")
