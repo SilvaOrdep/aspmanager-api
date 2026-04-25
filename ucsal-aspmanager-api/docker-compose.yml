@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 5
   backend:
-    image: gab1203/asp_manager_api:latest
+    build: .
     container_name: aspmanager-api
     ports:
       - "9090:8080"
@@ -29,18 +29,9 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
       - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS}
-
     depends_on:
-      - postgres
-
-  frontend:
-    # Substitua pelo caminho relativo da pasta onde está o Dockerfile do Angular
-    image: gab1203/aspmanager-frontend:latest
-    container_name: aspmanager-frontend
-    ports:
-      - "4200:80" # Expõe no host na porta 4200, mapeando para a 80 do Nginx
-    depends_on:
-      - backend
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
