@@ -45,9 +45,9 @@ class ApiIntegrationSoftwareSolicitacaoTest {
         Map<String, Object> payload = novoSoftwarePayload(List.of());
 
         mockMvc.perform(post("/api/v1/software")
-                        .with(admin())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload)))
+                .with(admin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.nome").isString())
@@ -67,23 +67,22 @@ class ApiIntegrationSoftwareSolicitacaoTest {
                 "tipoComputadores", "Desktop",
                 "tipoEspaco", "LABORATORIO",
                 "idEscola", 3,
-                "softwares", List.of(softwareId)
-        );
+                "softwares", List.of(softwareId));
 
         mockMvc.perform(post("/api/v1/espaco")
-                        .with(admin())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(espacoPayload)))
+                .with(admin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(espacoPayload)))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete("/api/v1/software/{id}", softwareId)
-                        .with(admin()))
-            .andExpect(status().isNoContent());
+                .with(admin()))
+                .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/v1/software/{id}", softwareId)
                 .with(admin()))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.statusRegistro").value("INATIVO"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.statusRegistro").value("INATIVO"));
     }
 
     @Test
@@ -91,9 +90,9 @@ class ApiIntegrationSoftwareSolicitacaoTest {
         Map<String, Object> payload = novaSolicitacaoSoftwarePayload();
 
         mockMvc.perform(post("/api/v1/software/solicitacoes")
-                        .with(professor())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload)))
+                .with(professor())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.statusSolicitacao").value("PENDENTE"))
@@ -105,7 +104,7 @@ class ApiIntegrationSoftwareSolicitacaoTest {
         criarSolicitacaoSoftware();
 
         mockMvc.perform(get("/api/v1/software/solicitacoes/minhas")
-                        .with(professorAutenticado()))
+                .with(professorAutenticado()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray());
     }
@@ -117,9 +116,9 @@ class ApiIntegrationSoftwareSolicitacaoTest {
         Map<String, Object> payload = Map.of("statusSolicitacao", "APROVADO");
 
         MvcResult result = mockMvc.perform(patch("/api/v1/software/solicitacoes/{id}", solicitacaoId)
-                        .with(admin())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload)))
+                .with(admin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statusSolicitacao").value("APROVADO"))
                 .andExpect(jsonPath("$.idSoftwareCriado").isNumber())
@@ -128,7 +127,7 @@ class ApiIntegrationSoftwareSolicitacaoTest {
         Long idSoftwareCriado = extrairId(result, "idSoftwareCriado");
 
         mockMvc.perform(get("/api/v1/software/{id}", idSoftwareCriado)
-                        .with(admin()))
+                .with(admin()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(idSoftwareCriado));
     }
@@ -140,9 +139,9 @@ class ApiIntegrationSoftwareSolicitacaoTest {
         Map<String, Object> payload = Map.of("statusSolicitacao", "REPROVADO");
 
         mockMvc.perform(patch("/api/v1/software/solicitacoes/{id}", solicitacaoId)
-                        .with(professor())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payload)))
+                .with(professor())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(payload)))
                 .andExpect(status().isForbidden());
     }
 
@@ -153,23 +152,23 @@ class ApiIntegrationSoftwareSolicitacaoTest {
         Map<String, Object> aprovada = Map.of("statusSolicitacao", "APROVADO");
 
         mockMvc.perform(patch("/api/v1/software/solicitacoes/{id}", solicitacaoId)
-                        .with(admin())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(aprovada)))
+                .with(admin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(aprovada)))
                 .andExpect(status().isOk());
 
         mockMvc.perform(patch("/api/v1/software/solicitacoes/{id}", solicitacaoId)
-                        .with(admin())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(aprovada)))
-            .andExpect(status().isConflict());
+                .with(admin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(aprovada)))
+                .andExpect(status().isConflict());
     }
 
     private Long criarSoftware() throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/software")
-                        .with(admin())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(novoSoftwarePayload(List.of()))))
+                .with(admin())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(novoSoftwarePayload(List.of()))))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -178,9 +177,9 @@ class ApiIntegrationSoftwareSolicitacaoTest {
 
     private Long criarSolicitacaoSoftware() throws Exception {
         MvcResult result = mockMvc.perform(post("/api/v1/software/solicitacoes")
-                        .with(professor())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(novaSolicitacaoSoftwarePayload())))
+                .with(professor())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(novaSolicitacaoSoftwarePayload())))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -190,8 +189,7 @@ class ApiIntegrationSoftwareSolicitacaoTest {
     private Map<String, Object> novaSolicitacaoSoftwarePayload() {
         return Map.of(
                 "idProfessor", 1,
-                "software", novoSoftwarePayload(List.of())
-        );
+                "software", novoSoftwarePayload(List.of()));
     }
 
     private Map<String, Object> novoSoftwarePayload(List<Long> disciplinas) {
@@ -201,8 +199,7 @@ class ApiIntegrationSoftwareSolicitacaoTest {
                 "urlDownload", "https://example.com/download/" + sufixo(),
                 "tipoLicenca", "Educacional",
                 "objetivoUso", "Uso em laboratório acadêmico",
-                "idDisciplinas", disciplinas
-        );
+                "idDisciplinas", disciplinas);
     }
 
     private Long extrairId(MvcResult result, String campo) throws Exception {
@@ -226,15 +223,14 @@ class ApiIntegrationSoftwareSolicitacaoTest {
                 Perfil.PROFESSOR,
                 StatusRegistro.ATIVO,
                 "200033111",
+                null,
                 3L,
-                List.of()
-        );
+                List.of());
 
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                 usuario,
                 null,
-                List.of(new SimpleGrantedAuthority("ROLE_PROFESSOR"))
-        );
+                List.of(new SimpleGrantedAuthority("ROLE_PROFESSOR")));
 
         return SecurityMockMvcRequestPostProcessors.authentication(auth);
     }

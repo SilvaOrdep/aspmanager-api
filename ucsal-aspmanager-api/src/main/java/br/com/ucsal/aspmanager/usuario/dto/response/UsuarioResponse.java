@@ -26,6 +26,9 @@ public record UsuarioResponse(
         @Schema(description = "Matrícula do professor quando aplicável", example = "202600123")
         String matricula,
 
+        @Schema(description = "Identificador do professor quando aplicável", example = "1")
+        Long idProfessor,
+
         @Schema(description = "Identificador de escola vinculada a professor quando aplicável", example = "1")
         Long idEscola,
 
