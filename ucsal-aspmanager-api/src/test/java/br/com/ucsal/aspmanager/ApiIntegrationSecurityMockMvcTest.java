@@ -52,8 +52,8 @@ class ApiIntegrationSecurityMockMvcTest {
     @Test
     void rota_publica_com_payload_invalido_deve_retornar_400() throws Exception {
         mockMvc.perform(post("/api/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -66,74 +66,75 @@ class ApiIntegrationSecurityMockMvcTest {
     @Test
     void professor_sem_permissao_para_outro_usuario_retorna_403() throws Exception {
         mockMvc.perform(get("/api/v1/usuarios/9")
-                        .with(user("professor@ucsal.com.br").roles("PROFESSOR"))
-                        .with(csrf()))
+                .with(user("professor@ucsal.com.br").roles("PROFESSOR"))
+                .with(csrf()))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void usuario_com_perfil_incorreto_na_rota_admin_retorna_403() throws Exception {
         mockMvc.perform(post("/api/v1/escola")
-                        .with(user("professor@ucsal.com.br").roles("PROFESSOR"))
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                .with(user("professor@ucsal.com.br").roles("PROFESSOR"))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void admin_pode_acessar_rota_admin_e_retorna_nao_404_por_autorizacao() throws Exception {
         mockMvc.perform(post("/api/v1/escola")
-                        .with(user("admin@ucsal.com.br").roles("ADMIN"))
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                .with(user("admin@ucsal.com.br").roles("ADMIN"))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void professor_pode_acessar_rota_de_leitura_compartilhada_e_nao_e_bloqueado_por_seguranca() throws Exception {
         mockMvc.perform(get("/api/v1/escola")
-                        .with(user("professor@ucsal.com.br").roles("PROFESSOR")))
+                .with(user("professor@ucsal.com.br").roles("PROFESSOR")))
                 .andExpect(status().isOk());
     }
 
     @Test
     void admin_pode_acessar_rota_de_leitura_compartilhada_e_nao_e_bloqueado_por_seguranca() throws Exception {
         mockMvc.perform(get("/api/v1/espaco")
-                        .with(user("admin@ucsal.com.br").roles("ADMIN")))
+                .with(user("admin@ucsal.com.br").roles("ADMIN")))
                 .andExpect(status().isOk());
     }
 
     @Test
     void professor_pode_usar_rota_de_solicitacao_e_recebe_requisicao_processada_ate_o_controller() throws Exception {
         mockMvc.perform(post("/api/v1/espaco/solicitacao")
-                        .with(user("professor@ucsal.com.br").roles("PROFESSOR"))
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                .with(user("professor@ucsal.com.br").roles("PROFESSOR"))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void usuario_autenticado_sem_perfil_correto_deve_retornar_403_em_rota_admin() throws Exception {
         mockMvc.perform(post("/api/v1/software")
-                        .with(user("usuario@ucsal.com.br").roles("PROFESSOR"))
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                .with(user("usuario@ucsal.com.br").roles("PROFESSOR"))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void rotas_inexistentes_devem_retornar_404_ou_403_conforme_a_segurança() throws Exception {
         mockMvc.perform(get("/api/v1/rota-que-nao-existe")
-                        .with(user("admin@ucsal.com.br").roles("ADMIN")))
+                .with(user("admin@ucsal.com.br").roles("ADMIN")))
                 .andExpect(status().isForbidden());
     }
 
     @SuppressWarnings("unused")
     private UsuarioResponse usuario(Long id, Perfil perfil) {
-        return new UsuarioResponse(id, "Usuário", "usuario@ucsal.com.br", perfil, StatusRegistro.ATIVO, null, null, null);
+        return new UsuarioResponse(id, "Usuário", "usuario@ucsal.com.br", perfil, StatusRegistro.ATIVO, null, null,
+                null, null);
     }
 }

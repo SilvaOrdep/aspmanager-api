@@ -44,9 +44,9 @@ public interface UsuarioMapper {
                 usuario.getPerfil(),
                 usuario.getStatusRegistro(),
                 professor == null ? null : professor.getMatricula(),
+                professor == null ? null : professor.getId(),
                 professor == null ? null : professor.getEscola().getId(),
-                toTelefoneStrings(usuario.getTelefones())
-        );
+                toTelefoneStrings(usuario.getTelefones()));
     }
 
     default UsuarioResponse toResponse(Usuario usuario) {
@@ -112,4 +112,3 @@ public interface UsuarioMapper {
         }
     }
 }
-
