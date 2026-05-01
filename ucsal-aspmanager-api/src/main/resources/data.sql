@@ -5,7 +5,7 @@ VALUES (
 	'$2a$12$Mkk.h4OJE8Icu4FLNvuBXuG4cvPK0x7qHjbZOdgAhgUPqajHD20Ku',
 	'ADMIN',
 	'ATIVO'
-);
+)ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO instituicoes_ensino (id, nome, endereco)
 VALUES
@@ -27,7 +27,7 @@ VALUES (
 	'$2a$12$fS4l.WRsZSRHHPqrWSpfduo5dbByLjMhfxrvxowMVNqT2gVpl30Te',
 	'PROFESSOR',
 	'ATIVO'
-);
+)ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO professores (id, matricula, id_usuario, id_escola)
 VALUES
