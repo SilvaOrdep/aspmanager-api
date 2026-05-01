@@ -9,14 +9,14 @@ VALUES (
 
 INSERT INTO instituicoes_ensino (id, nome, endereco)
 VALUES
-    (1, 'UCSAL - Campus Pituaçu', 'Av. Pinto de Aguiar, 2589 - Pituaçu, Salvador - BA');
+    (1, 'UCSAL - Campus Pituaçu', 'Av. Pinto de Aguiar, 2589 - Pituaçu, Salvador - BA') ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO escolas (id, nome, status_registro, id_instituicao, id_professor_coordenador)
 VALUES
-    (1, 'Escola de Educação, Cultura e Humanidades', 'ATIVO', 1, NULL),
-    (2, 'Escola de Ciências Sociais e Aplicadas', 'ATIVO', 1, NULL),
-    (3, 'Escola de Engenharias e Ciências Tecnológicas', 'ATIVO', 1, NULL),
-    (4, 'Escola de Ciências Naturais e da Saúde', 'ATIVO', 1, NULL);
+    (1, 'Escola de Educação, Cultura e Humanidades', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING,
+    (2, 'Escola de Ciências Sociais e Aplicadas', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING,
+    (3, 'Escola de Engenharias e Ciências Tecnológicas', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING,
+    (4, 'Escola de Ciências Naturais e da Saúde', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING;
 
 
 INSERT INTO usuarios (id, nome_completo, email, senha, perfil, status_registro)
@@ -31,7 +31,7 @@ VALUES (
 
 INSERT INTO professores (id, matricula, id_usuario, id_escola)
 VALUES
-    (1, 200033111, 2, 3);
+    (1, 200033111, 2, 3) ON CONFLICT (id, matricula) DO NOTHING;
 
 UPDATE escolas
 SET id_professor_coordenador = 1
