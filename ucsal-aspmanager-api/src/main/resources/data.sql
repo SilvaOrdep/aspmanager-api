@@ -1,11 +1,12 @@
-INSERT INTO usuarios (nome_completo, email, senha, perfil, status_registro)
+INSERT INTO usuarios (id, nome_completo, email, senha, perfil, status_registro)
 VALUES (
+	1,
 	'Administrador do Sistema',
 	'admin@ucsal.com.br',
 	'$2a$12$Mkk.h4OJE8Icu4FLNvuBXuG4cvPK0x7qHjbZOdgAhgUPqajHD20Ku',
 	'ADMIN',
 	'ATIVO'
-)ON CONFLICT (email) DO NOTHING;
+)ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO instituicoes_ensino (id, nome, endereco)
 VALUES
@@ -13,9 +14,9 @@ VALUES
 
 INSERT INTO escolas (id, nome, status_registro, id_instituicao, id_professor_coordenador)
 VALUES
-    (1, 'Escola de Educação, Cultura e Humanidades', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING,
-    (2, 'Escola de Ciências Sociais e Aplicadas', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING,
-    (3, 'Escola de Engenharias e Ciências Tecnológicas', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING,
+    (1, 'Escola de Educação, Cultura e Humanidades', 'ATIVO', 1, NULL) ,
+    (2, 'Escola de Ciências Sociais e Aplicadas', 'ATIVO', 1, NULL),
+    (3, 'Escola de Engenharias e Ciências Tecnológicas', 'ATIVO', 1, NULL),
     (4, 'Escola de Ciências Naturais e da Saúde', 'ATIVO', 1, NULL) ON CONFLICT (id) DO NOTHING;
 
 
@@ -27,11 +28,11 @@ VALUES (
 	'$2a$12$fS4l.WRsZSRHHPqrWSpfduo5dbByLjMhfxrvxowMVNqT2gVpl30Te',
 	'PROFESSOR',
 	'ATIVO'
-)ON CONFLICT (email) DO NOTHING;
+)ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO professores (id, matricula, id_usuario, id_escola)
 VALUES
-    (1, 200033111, 2, 3) ON CONFLICT (id, matricula) DO NOTHING;
+    (1, 200033111, 2, 3) ON CONFLICT (id) DO NOTHING;
 
 UPDATE escolas
 SET id_professor_coordenador = 1
